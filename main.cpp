@@ -7,6 +7,7 @@ using namespace std;
 
 #include "auxlib.h"
 #include "cppstrtok.h"
+#include "stringset.h"
 
 int main (int argc, char** argv) {
    int option;
@@ -45,14 +46,13 @@ int main (int argc, char** argv) {
          set_exitstatus(EXIT_FAILURE);
       }else{
          tokens = cpplines(pipe, strdup(path.c_str()));
-         for(auto i = tokens.begin(); i != tokens.end(); ++i){ /// DEBUG
-            printf("%s\n", i->c_str());
-         }
          pclose(pipe);
       }
-      /*
-         ADD: Insert tokens into the string set
-      */
+      for(auto token_iter = tokens.begin();
+      token_iter != tokens.end(); ++token_iter){
+         printf("%s\n", token_iter->c_str()); /// DEBUG
+         intern_stringset(token_iter->c_str());
+      }
       /*
          ADD: Dump string set into [program].str
       */
