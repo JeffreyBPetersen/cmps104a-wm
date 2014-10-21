@@ -59,10 +59,20 @@ int main (int argc, char** argv) {
       fprintf(stderr,
       "File input not yet implemented, path: %s, filename: %s\n",
       path.c_str(), program_name.c_str());
-      /*
-         ADD: modify cpplines in cppstrtok to return tokens
-         pass file path to cpplines and get tokens
-      */
+      string command = CPP + " " + path;
+      printf("command=\"%s\"\n", command.c_str()); /// DEBUG
+      FILE* pipe = popen(command.c_str(), "r");
+      if(pipe == NULL){
+         fprintf(stderr, "Failed to open file input pipe\n");
+         set_exitstatus(EXIT_FAILURE);
+      }else{
+         /*
+            ADD: Modify cpplines to return tokens
+            get tokens
+         */
+         cpplines(pipe, strdup(path.c_str()));
+         pclose(pipe);
+      }
       /*
          ADD: Insert tokens into the string set
       */
