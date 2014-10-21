@@ -45,6 +45,9 @@ dep :
 	- rm ${DEPFILE}
 	${MAKE} --no-print-directory ${DEPFILE}
 
+submit:
+	submit cmps104a-wm.f14 ${SOURCES} ${HEADERS} Makefile README
+
 include Makefile.dep
 
 test : ${EXECBIN}
