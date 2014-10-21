@@ -11,7 +11,7 @@ HEADERS    = auxlib.h cppstrtok.h stringset.h
 OBJECTS    = ${SOURCES:.cpp=.o}
 EXECBIN    = oc
 SRCFILES   = ${HEADERS} ${SOURCES} ${MKFILE}
-SMALLFILES = ${DEPFILE}
+SMALLFILES = ${DEPFILE} README
 CHECKINS   = ${SRCFILES} ${SMALLFILES}
 
 all : ${EXECBIN}
@@ -21,6 +21,9 @@ ${EXECBIN} : ${OBJECTS}
 
 %.o : %.cpp
 	${GCC} -c $<
+
+style :
+	checksource ${CHECKINS}
 
 ci : push
 	checksource ${CHECKINS}
@@ -48,7 +51,8 @@ dep :
 	${MAKE} --no-print-directory ${DEPFILE}
 
 submit:
-	submit cmps104a-wm.f14 asg1 ${SOURCES} ${HEADERS} Makefile README
+	submit cmps104a-wm.f14 asg1 /
+	${SOURCES} ${HEADERS} Makefile README
 
 include Makefile.dep
 
