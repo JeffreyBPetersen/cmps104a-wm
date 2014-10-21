@@ -30,8 +30,8 @@ int main (int argc, char** argv) {
    */
    
    int option;
-	string path;
-	string program_name;
+   string path;
+   string program_name;
    while((option = getopt(argc, argv, "ly@:D:")) != -1){
       switch(option){
          case '@':
@@ -53,17 +53,16 @@ int main (int argc, char** argv) {
       }
    }
    if(optind < argc){
-		path = argv[optind];
-		program_name = basename(strdup(path.c_str()));
-		/*
-			ADD: Remove any file extension from program_name
-		*/
-		fprintf(stderr, 
-      "File input not yet implemented, path: %s, filename: %s\n", path.c_str(), program_name.c_str());
+      path = argv[optind];
+      program_name = basename(strdup(path.c_str()));
+      program_name = program_name.substr(0, program_name.find("."));
+      fprintf(stderr,
+      "File input not yet implemented, path: %s, filename: %s\n",
+      path.c_str(), program_name.c_str());
    }
    /*
-		ADD: modify cpplines in cppstrtok to return tokens
-		pass file path to cpplines and get tokens
+      ADD: modify cpplines in cppstrtok to return tokens
+      pass file path to cpplines and get tokens
    */
    /*
       ADD: Insert tokens into the string set
