@@ -53,27 +53,20 @@ int main (int argc, char** argv) {
       fprintf(stderr, 
       "File input not yet implemented, file: %s\n", argv[optind]);
 		/*
-			ADD: Get file name using basename(3)
-			use for naming output files
+			ADD: Get program name from file path using basename(3)
+			remove file extension if present
+			save program name for naming output files
 		*/
-      /*
-         ADD: Support directories, //handled by cppstrtok
-         find file and separate out filename if necessary //handled by cppstrtok
-      */
    }
    /*
-      ADD: Filter input through the C preprocessor, /usr/bin/cpp
-      cppstrtok.cpp provides example,..
-      needs modification for returning tokens instead of printing them
+		ADD: modify cpplines in cppstrtok to return tokens
+		pass file path to cpplines and get tokens
    */
    /*
-      ADD: Read line using fgets(3), //handled by cppstrtok
-      tokenize it along whitespace using strtok_r(3)..
-      with the string " \t\n", //handled by cppstrtok
-      then insert it into the string set
+      ADD: Insert tokens into the string set
    */
    /*
-      ADD: Dump string set into trace file
+      ADD: Dump string set into [program].str
    */
    return get_exitstatus();
 }
