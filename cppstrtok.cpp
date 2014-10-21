@@ -35,13 +35,10 @@ vector<string> cpplines (FILE* pipe, char* filename) {
       char* fgets_rc = fgets (buffer, LINESIZE, pipe);
       if (fgets_rc == NULL) break;
       chomp (buffer, '\n');
-      printf ("%s:line %d: [%s]\n", filename, linenr, buffer); /// DEBUG
       // http://gcc.gnu.org/onlinedocs/cpp/Preprocessor-Output.html
       int sscanf_rc = sscanf (buffer, "# %d \"%[^\"]\"",
                               &linenr, filename);
-      if (sscanf_rc == 2) {
-         printf ("DIRECTIVE: line %d file \"%s\"\n",
-         linenr, filename); /// DEBUG
+      if(sscanf_rc == 2){
          continue;
       }
       char* savepos = NULL;
@@ -51,8 +48,6 @@ vector<string> cpplines (FILE* pipe, char* filename) {
          bufptr = NULL;
          if (token == NULL) break;
          tokens.push_back(token);
-         printf ("token %d.%d: [%s]\n",
-                 linenr, tokenct, token); /// DEBUG
       }
       ++linenr;
    }

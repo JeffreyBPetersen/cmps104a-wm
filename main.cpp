@@ -33,6 +33,7 @@ int main (int argc, char** argv) {
       }
    }
    for(int arg_index = optind; arg_index < argc; arg_index++){
+      vector<string> tokens;
       path = argv[arg_index];
       program_name = basename(strdup(path.c_str()));
       program_name = program_name.substr(0, program_name.find("."));
@@ -43,11 +44,10 @@ int main (int argc, char** argv) {
          fprintf(stderr, "Failed to open file input pipe\n");
          set_exitstatus(EXIT_FAILURE);
       }else{
-         /*
-            ADD: Modify cpplines to return tokens
-            get tokens
-         */
-         cpplines(pipe, strdup(path.c_str()));
+         tokens = cpplines(pipe, strdup(path.c_str()));
+         for(auto i = tokens.begin(); i != tokens.end(); ++i){ /// DEBUG
+            printf("%s\n", i->c_str());
+         }
          pclose(pipe);
       }
       /*
