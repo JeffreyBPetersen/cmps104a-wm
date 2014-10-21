@@ -1,6 +1,7 @@
 // Jeffrey Petersen | jebpeter@ucsc.edu
 
 #include <string>
+#include <unistd.h>
 using namespace std;
 
 #include "auxlib.h"
@@ -8,6 +9,7 @@ using namespace std;
 
 int main (int argc, char** argv) {
    set_execname (argv[0]);
+   /*
    for (int argi = 1; argi < argc; ++argi) {
       char* filename = argv[argi];
       string command = CPP + " " + filename;
@@ -21,5 +23,15 @@ int main (int argc, char** argv) {
          eprint_status (command.c_str(), pclose_rc);
       }
    }
+   */
+   
+   int option;
+   while((option = getopt(argc, argv, "")) != -1){
+      switch(option){
+         default:
+            set_exitstatus(EXIT_FAILURE);
+      }
+   }
+   
    return get_exitstatus();
 }
