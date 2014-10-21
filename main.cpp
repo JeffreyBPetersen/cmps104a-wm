@@ -46,7 +46,9 @@ int main (int argc, char** argv) {
          set_exitstatus(EXIT_FAILURE);
       }else{
          tokens = cpplines(pipe, strdup(path.c_str()));
-         pclose(pipe);
+         int cpp_exit = pclose(pipe);
+         if(cpp_exit != 0)
+            set_exitstatus(1);
       }
       for(auto token_iter = tokens.begin();
       token_iter != tokens.end(); ++token_iter){

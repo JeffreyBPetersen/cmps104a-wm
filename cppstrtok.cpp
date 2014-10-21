@@ -33,7 +33,6 @@ vector<string> cpplines (FILE* pipe, char* filename) {
    for (;;) {
       char buffer[LINESIZE];
       char* fgets_rc = fgets (buffer, LINESIZE, pipe);
-      /// ADD: Detect errors from cpp after fgets
       if (fgets_rc == NULL) break;
       chomp (buffer, '\n');
       // http://gcc.gnu.org/onlinedocs/cpp/Preprocessor-Output.html
