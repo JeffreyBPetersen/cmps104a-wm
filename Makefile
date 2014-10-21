@@ -33,7 +33,7 @@ push:
 
 up-%: spotless
 	git add *
-	git commit -m "$(@:git-%=%)"
+	git commit -m "$(@:up-%=%)"
 	git push
 
 clean :
