@@ -26,9 +26,16 @@ int main (int argc, char** argv) {
    */
    
    int option;
-   while((option = getopt(argc, argv, "")) != -1){
+   while((option = getopt(argc, argv, "ly")) != -1){
       switch(option){
+         case 'l':
+            fprintf(stderr, "Option '-l' not yet implemented\n");
+            break;
+         case 'y':
+            fprintf(stderr, "Option '-y' not yet implemented\n");
+            break;
          default:
+            fprintf(stderr, "Unrecognized option: '-%c'\n", optopt);
             set_exitstatus(EXIT_FAILURE);
       }
    }
