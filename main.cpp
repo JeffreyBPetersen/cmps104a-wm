@@ -44,6 +44,22 @@ int main (int argc, char** argv) {
             set_exitstatus(EXIT_FAILURE);
       }
    }
-   
+	if(optind < argc){
+		fprintf(stderr, "File input not yet implemented, file: %s\n", argv[optind]);
+		/*
+			ADD: Support directories, find file and separate out filename if necessary
+		*/
+	}
+	/*
+		ADD: Filter input through the C preprocessor, /usr/bin/cpp
+	*/
+	/*
+		ADD: Read line using fgets(3), 
+		tokenize it along whitespace using strtok_r(3) with the string " \t\n",
+		then insert it into the string set
+   */
+	/*
+		ADD: Dump string set into trace file
+	*/
    return get_exitstatus();
 }
