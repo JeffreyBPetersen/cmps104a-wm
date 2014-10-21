@@ -1,8 +1,9 @@
 // Jeffrey Petersen | jebpeter@ucsc.edu
 
+#include <fstream>
+#include <libgen.h>
 #include <string.h>
 #include <unistd.h>
-#include <libgen.h>
 using namespace std;
 
 #include "auxlib.h"
@@ -39,7 +40,6 @@ int main (int argc, char** argv) {
       program_name = basename(strdup(path.c_str()));
       program_name = program_name.substr(0, program_name.find("."));
       string command = CPP + " " + path;
-      printf("command=\"%s\"\n", command.c_str()); /// DEBUG
       FILE* pipe = popen(command.c_str(), "r");
       if(pipe == NULL){
          fprintf(stderr, "Failed to open file input pipe\n");
@@ -50,12 +50,12 @@ int main (int argc, char** argv) {
       }
       for(auto token_iter = tokens.begin();
       token_iter != tokens.end(); ++token_iter){
-         printf("%s\n", token_iter->c_str()); /// DEBUG
          intern_stringset(token_iter->c_str());
       }
-      /*
-         ADD: Dump string set into [program].str
-      */
+      ofstream str_output;
+      str_output.open(program_name + ".str");
+      dump_stringset(str_output);
+      str_output.close();
    }
    return get_exitstatus();
 }
