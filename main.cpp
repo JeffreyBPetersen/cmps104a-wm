@@ -2,6 +2,7 @@
 
 #include <string>
 #include <unistd.h>
+#include <libgen.h>
 using namespace std;
 
 #include "auxlib.h"
@@ -51,9 +52,13 @@ int main (int argc, char** argv) {
    if(optind < argc){
       fprintf(stderr, 
       "File input not yet implemented, file: %s\n", argv[optind]);
+		/*
+			ADD: Get file name using basename(3)
+			use for naming output files
+		*/
       /*
-         ADD: Support directories, 
-         find file and separate out filename if necessary
+         ADD: Support directories, //handled by cppstrtok
+         find file and separate out filename if necessary //handled by cppstrtok
       */
    }
    /*
