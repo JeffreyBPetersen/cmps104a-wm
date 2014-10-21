@@ -1,6 +1,5 @@
 // Jeffrey Petersen | jebpeter@ucsc.edu
 
-#include <string>
 #include <string.h>
 #include <unistd.h>
 #include <libgen.h>

@@ -4,7 +4,6 @@
 // Print out each input line read in, then strtok it for
 // tokens.
 
-#include <string>
 using namespace std;
 
 #include <errno.h>
@@ -26,7 +25,7 @@ void chomp (char* string, char delim) {
 }
 
 // Run cpp against the lines of the file.
-void cpplines (FILE* pipe, char* filename) {
+vector<string> cpplines (FILE* pipe, char* filename) {
    int linenr = 1;
    char inputname[LINESIZE];
    strcpy (inputname, filename);
