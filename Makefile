@@ -4,14 +4,13 @@ VALGRIND   = valgrind --leak-check=full --show-reachable=yes
 
 MKFILE     = Makefile
 DEPFILE    = Makefile.dep
-SOURCES    = auxlib.cpp cppstrtok.cpp
-HEADERS    = auxlib.h
+SOURCES    = auxlib.cpp cppstrtok.cpp main.cpp stringset.cpp
+HEADERS    = auxlib.h stringset.h
 OBJECTS    = ${SOURCES:.cpp=.o}
-EXECBIN    = cppstrtok
+EXECBIN    = oc
 SRCFILES   = ${HEADERS} ${SOURCES} ${MKFILE}
-SMALLFILES = ${DEPFILE} foo.oc foo1.oh foo2.oh
+SMALLFILES = ${DEPFILE}
 CHECKINS   = ${SRCFILES} ${SMALLFILES}
-LISTING    = Listing.ps
 
 all : ${EXECBIN}
 
@@ -21,16 +20,23 @@ ${EXECBIN} : ${OBJECTS}
 %.o : %.cpp
 	${GCC} -c $<
 
-ci :
-	git push
+ci : push
 	checksource ${CHECKINS}
+
+push:
+	git push
+
+up-%: spotless
+	git add *
+	git commit -m "$(@:git-%=%)"
+	git push
 
 clean :
 	- rm ${OBJECTS}
 
 spotless : clean
-	- rm ${EXECBIN} ${LISTING} ${LISTING:.ps=.pdf} ${DEPFILE} \
-	     test.out test.err misc.lis
+	- rm ${EXECBIN} ${DEPFILE} \
+	     test.out test.err
 
 ${DEPFILE} :
 	${MKDEP} ${SOURCES} >${DEPFILE}
@@ -43,9 +49,3 @@ include Makefile.dep
 
 test : ${EXECBIN}
 	${VALGRIND} ${EXECBIN} foo.oc 1>test.out 2>test.err
-
-misc.lis : ${DEPFILE} foo.oc foo1.oh foo2.oh
-	morecat ${DEPFILE} foo.oc foo1.oh foo2.oh >misc.lis
-
-lis : misc.lis test
-	mkpspdf ${LISTING} ${SRCFILES} misc.lis test.out test.err
