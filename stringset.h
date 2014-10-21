@@ -1,3 +1,5 @@
+// Jeffrey Petersen | jebpeter@ucsc.edu
+
 #ifndef __STRINGSET__
 #define __STRINGSET__
 

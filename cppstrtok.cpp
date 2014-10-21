@@ -1,3 +1,5 @@
+// Jeffrey Petersen | jebpeter@ucsc.edu
+
 // Use cpp to scan a file and print line numbers.
 // Print out each input line read in, then strtok it for
 // tokens.

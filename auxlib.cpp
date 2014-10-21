@@ -1,3 +1,5 @@
+// Jeffrey Petersen | jebpeter@ucsc.edu
+
 #include <assert.h>
 #include <errno.h>
 #include <libgen.h>

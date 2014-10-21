@@ -1,3 +1,5 @@
+// Jeffrey Petersen | jebpeter@ucsc.edu
+
 #include <iomanip>
 #include <unordered_set>
 using namespace std;

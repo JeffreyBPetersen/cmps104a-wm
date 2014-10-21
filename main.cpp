@@ -1,3 +1,5 @@
+// Jeffrey Petersen | jebpeter@ucsc.edu
+
 #include <string>
 using namespace std;
 

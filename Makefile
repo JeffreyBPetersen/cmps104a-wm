@@ -1,3 +1,5 @@
+# Jeffrey Petersen | jebpeter@ucsc.edu
+
 GCC        = g++ -g -O0 -Wall -Wextra -std=gnu++11
 MKDEP      = g++ -MM -std=gnu++11
 VALGRIND   = valgrind --leak-check=full --show-reachable=yes
