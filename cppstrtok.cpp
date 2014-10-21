@@ -26,6 +26,7 @@ void chomp (char* string, char delim) {
 
 // Run cpp against the lines of the file.
 vector<string> cpplines (FILE* pipe, char* filename) {
+   vector<string> tokens;
    int linenr = 1;
    char inputname[LINESIZE];
    strcpy (inputname, filename);
@@ -34,12 +35,13 @@ vector<string> cpplines (FILE* pipe, char* filename) {
       char* fgets_rc = fgets (buffer, LINESIZE, pipe);
       if (fgets_rc == NULL) break;
       chomp (buffer, '\n');
-      printf ("%s:line %d: [%s]\n", filename, linenr, buffer);
+      printf ("%s:line %d: [%s]\n", filename, linenr, buffer); /// DEBUG
       // http://gcc.gnu.org/onlinedocs/cpp/Preprocessor-Output.html
       int sscanf_rc = sscanf (buffer, "# %d \"%[^\"]\"",
                               &linenr, filename);
       if (sscanf_rc == 2) {
-         printf ("DIRECTIVE: line %d file \"%s\"\n", linenr, filename);
+         printf ("DIRECTIVE: line %d file \"%s\"\n",
+         linenr, filename); /// DEBUG
          continue;
       }
       char* savepos = NULL;
@@ -48,9 +50,11 @@ vector<string> cpplines (FILE* pipe, char* filename) {
          char* token = strtok_r (bufptr, " \t\n", &savepos);
          bufptr = NULL;
          if (token == NULL) break;
+         tokens.push_back(token);
          printf ("token %d.%d: [%s]\n",
-                 linenr, tokenct, token);
+                 linenr, tokenct, token); /// DEBUG
       }
       ++linenr;
    }
+   return tokens;
 }

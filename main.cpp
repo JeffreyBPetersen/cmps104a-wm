@@ -36,9 +36,6 @@ int main (int argc, char** argv) {
       path = argv[arg_index];
       program_name = basename(strdup(path.c_str()));
       program_name = program_name.substr(0, program_name.find("."));
-      fprintf(stderr,
-      "File input not yet implemented, path: %s, filename: %s\n",
-      path.c_str(), program_name.c_str());
       string command = CPP + " " + path;
       printf("command=\"%s\"\n", command.c_str()); /// DEBUG
       FILE* pipe = popen(command.c_str(), "r");
