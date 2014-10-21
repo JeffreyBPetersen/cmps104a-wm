@@ -22,7 +22,7 @@ ${EXECBIN} : ${OBJECTS}
 	${GCC} -c $<
 
 ci :
-	cid + ${CHECKINS}
+	git push
 	checksource ${CHECKINS}
 
 clean :
