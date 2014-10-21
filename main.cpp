@@ -1,6 +1,7 @@
 // Jeffrey Petersen | jebpeter@ucsc.edu
 
 #include <string>
+#include <string.h>
 #include <unistd.h>
 #include <libgen.h>
 using namespace std;
@@ -29,6 +30,8 @@ int main (int argc, char** argv) {
    */
    
    int option;
+	string path;
+	string program_name;
    while((option = getopt(argc, argv, "ly@:D:")) != -1){
       switch(option){
          case '@':
@@ -50,13 +53,13 @@ int main (int argc, char** argv) {
       }
    }
    if(optind < argc){
-      fprintf(stderr, 
-      "File input not yet implemented, file: %s\n", argv[optind]);
+		path = argv[optind];
+		program_name = basename(strdup(path.c_str()));
 		/*
-			ADD: Get program name from file path using basename(3)
-			remove file extension if present
-			save program name for naming output files
+			ADD: Remove any file extension from program_name
 		*/
+		fprintf(stderr, 
+      "File input not yet implemented, path: %s, filename: %s\n", path.c_str(), program_name.c_str());
    }
    /*
 		ADD: modify cpplines in cppstrtok to return tokens
