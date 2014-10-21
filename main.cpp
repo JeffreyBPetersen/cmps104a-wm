@@ -52,23 +52,23 @@ int main (int argc, char** argv) {
             set_exitstatus(EXIT_FAILURE);
       }
    }
-   if(optind < argc){
-      path = argv[optind];
+   for(int arg_index = optind; arg_index < argc; arg_index++){
+      path = argv[arg_index];
       program_name = basename(strdup(path.c_str()));
       program_name = program_name.substr(0, program_name.find("."));
       fprintf(stderr,
       "File input not yet implemented, path: %s, filename: %s\n",
       path.c_str(), program_name.c_str());
+      /*
+         ADD: modify cpplines in cppstrtok to return tokens
+         pass file path to cpplines and get tokens
+      */
+      /*
+         ADD: Insert tokens into the string set
+      */
+      /*
+         ADD: Dump string set into [program].str
+      */
    }
-   /*
-      ADD: modify cpplines in cppstrtok to return tokens
-      pass file path to cpplines and get tokens
-   */
-   /*
-      ADD: Insert tokens into the string set
-   */
-   /*
-      ADD: Dump string set into [program].str
-   */
    return get_exitstatus();
 }
