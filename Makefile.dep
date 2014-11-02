@@ -1,0 +1,4 @@
+auxlib.o: auxlib.cpp auxlib.h
+cppstrtok.o: cppstrtok.cpp auxlib.h cppstrtok.h
+main.o: main.cpp auxlib.h cppstrtok.h stringset.h
+stringset.o: stringset.cpp stringset.h

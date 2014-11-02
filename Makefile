@@ -31,8 +31,8 @@ ci : push
 push:
 	git push
 
-up-%: spotless
-	git add *
+up-%:
+	git add ${CHECKINS}
 	git commit -m "$(@:up-%=%)"
 	git push
 
