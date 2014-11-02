@@ -46,7 +46,7 @@ spotless : clean
 ${DEPFILE} :
 	${MKDEP} ${SOURCES} >${DEPFILE}
 
-dep :
+deps :
 	- rm ${DEPFILE}
 	${MAKE} --no-print-directory ${DEPFILE}
 
