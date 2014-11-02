@@ -6,8 +6,9 @@ VALGRIND   = valgrind --leak-check=full --show-reachable=yes
 
 MKFILE     = Makefile
 DEPFILE    = Makefile.dep
-SOURCES    = auxlib.cpp cppstrtok.cpp main.cpp stringset.cpp
-HEADERS    = auxlib.h cppstrtok.h stringset.h
+SOURCES    = astree.cpp auxlib.cpp cppstrtok.cpp \
+lyutils.cpp main.cpp stringset.cpp
+HEADERS    = astree.h auxlib.h cppstrtok.h lyutils.h stringset.h
 OBJECTS    = ${SOURCES:.cpp=.o}
 EXECBIN    = oc
 SRCFILES   = ${HEADERS} ${SOURCES} ${MKFILE}
