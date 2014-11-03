@@ -12,7 +12,7 @@ HEADERS    = astree.h auxlib.h cppstrtok.h lyutils.h stringset.h
 OBJECTS    = ${SOURCES:.cpp=.o}
 EXECBIN    = oc
 SRCFILES   = ${HEADERS} ${SOURCES} ${MKFILE}
-SMALLFILES = ${DEPFILE} README
+SMALLFILES = ${DEPFILE} README parser.y scanner.l
 CHECKINS   = ${SRCFILES} ${SMALLFILES}
 
 all : ${EXECBIN}
