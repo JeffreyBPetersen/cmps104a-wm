@@ -66,8 +66,7 @@ deps :
 	${MAKE} --no-print-directory ${DEPFILE}
 
 submit:
-	submit cmps104a-wm.f14 asg1 \
-	${SOURCES} ${HEADERS} Makefile README
+	submit cmps104a-wm.f14 asg1 ${CHECKINS}
 
 include Makefile.dep
 
