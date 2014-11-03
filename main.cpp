@@ -27,7 +27,7 @@ int main (int argc, char** argv) {
             "Option '-D' not yet implemented, string: %s\n", optarg);
             break;
          case 'l':
-				//ADD: enable yy_flex_debug
+            //ADD: enable yy_flex_debug
             fprintf(stderr, "Option '-l' not yet implemented\n");
             break;
          case 'y':
