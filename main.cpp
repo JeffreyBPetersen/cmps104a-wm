@@ -55,6 +55,7 @@ int main (int argc, char** argv) {
       }else{
       
          // tokenize input from pipe
+         //ADD: new tokenization that uses scanner
          tokens = cpplines(pipe, strdup(path.c_str()));
          int cpp_exit = pclose(pipe);
          if(cpp_exit != 0)
