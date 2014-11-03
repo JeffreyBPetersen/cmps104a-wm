@@ -9,11 +9,18 @@ DEPFILE    = Makefile.dep
 SOURCES    = astree.cpp auxlib.cpp cppstrtok.cpp \
 lyutils.cpp main.cpp stringset.cpp
 HEADERS    = astree.h auxlib.h cppstrtok.h lyutils.h stringset.h
-OBJECTS    = ${SOURCES:.cpp=.o}
+OBJECTS    = ${CLGEN} ${HYGEN} ${CYGEN} ${SOURCES:.cpp=.o}
 EXECBIN    = oc
 SRCFILES   = ${HEADERS} ${SOURCES} ${MKFILE}
 SMALLFILES = ${DEPFILE} README parser.y scanner.l
 CHECKINS   = ${SRCFILES} ${SMALLFILES}
+LSOURCES   = scanner.l
+YSOURCES   = parser.y
+CLGEN      = yylex.cpp
+HYGEN      = yyparse.h
+CYGEN      = yyparse.cpp
+LREPORT    = yylex.output
+YREPORT    = yyparse.output
 
 all : ${EXECBIN}
 
@@ -22,6 +29,13 @@ ${EXECBIN} : ${OBJECTS}
 
 %.o : %.cpp
 	${GCC} -c $<
+
+${CLGEN} : ${LSOURCES}
+	flex --outfile=${CLGEN} ${LSOURCES} 2>${LREPORT}
+	- grep -v '^ ' ${LREPORT}
+
+${CYGEN} ${HYGEN} : ${YSOURCES}
+	bison --defines=${HYGEN} --output=${CYGEN} ${YSOURCES}
 
 style :
 	checksource ${CHECKINS}
@@ -42,7 +56,7 @@ clean :
 
 spotless : clean
 	- rm ${EXECBIN} ${DEPFILE} \
-	     test.out test.err
+	     test.out test.err yylex.output yyparse.output
 
 ${DEPFILE} :
 	${MKDEP} ${SOURCES} >${DEPFILE}
