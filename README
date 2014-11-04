@@ -2,6 +2,8 @@ Jeffrey Petersen | jebpeter@ucsc.edu
 DOLOG
 ADD regex for cpp output directives
 ADD regex for invalid identifiers/characters/strings
+ADD correct functionality for scanner tokenization
+ADD counters for .tok file output
 ADD output to .tok file
 UPDATE output to .str file
 ADD identification of .oc file extension

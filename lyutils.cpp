@@ -1,7 +1,10 @@
 // Jeffrey Petersen | jebpeter@ucsc.edu
 
-#include <vector>
+#include <iomanip>
+//DEBUG:
+#include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 
 #include <assert.h>
@@ -70,6 +73,12 @@ int yylval_token (int symbol) {
    yylval = new_astree (symbol, included_filenames.size() - 1,
                         scan_linenr, offset, yytext);
    //ADD: write to .tok file
+   //DEBUG:
+   cout << right << setw(4) << "#" << 
+   setw(4) << "##" << "." << "###" << 
+   setw(5) << "###" << "  " << 
+   left << setw(16) << get_yytname(yylval->symbol) 
+   << "(" << yylval->lexinfo->c_str() << ")\n";
    return symbol;
 }
 
@@ -88,11 +97,14 @@ void scanner_include (void) {
       errprintf ("%: %d: [%s]: invalid directive, ignored\n",
                  scan_rc, yytext);
    }else {
-      printf (";# %d \"%s\"\n", linenr, filename);
+      //OLD:
+      //printf (";# %d \"%s\"\n", linenr, filename);
       scanner_newfilename (filename);
       scan_linenr = linenr - 1;
       DEBUGF ('m', "filename=%s, scan_linenr=%d\n",
               included_filenames.back().c_str(), scan_linenr);
    }
    //ADD: write to .tok file
+   //DEBUG:
+   cout << "# " << linenr << " \"" << filename << "\"\n";
 }

@@ -1,6 +1,8 @@
 %{
 // Jeffrey Petersen | jebpeter@ucsc.edu
 #include <iostream>
+#include "lyutils.h"
+#include "yyparse.h"
 using namespace std;
 %}
 
@@ -14,7 +16,7 @@ using namespace std;
 
 %%
 
-\[\] { cout << "TOK_ARRAY{" << yytext << "}\n"; }
+\[\] { return yylval_token(TOK_ARRAY); }
 \( { cout << "open_paren{" << yytext << "}\n"; }
 \) { cout << "close_paren{" << yytext << "}\n"; }
 \[ { cout << "open_bracket" << yytext << "}\n"; }
@@ -53,11 +55,13 @@ null { cout << "TOK_NULL{" << yytext << "}\n"; }
 ord { cout << "TOK_ORD{" << yytext << "}\n"; }
 chr { cout << "TOK_CHR{" << yytext << "}\n"; }
 new { cout << "TOK_NEW{" << yytext << "}\n"; }
-[a-zA-Z_][a-zA-Z0-9_]* { cout << "TOK_IDENT{" << yytext << "}\n"; }
+[a-zA-Z_][a-zA-Z0-9_]* { return yylval_token(TOK_IDENT); }
 [0-9]+ { cout << "TOK_INTCON{" << yytext << "}\n"; }
-('([^\\'\n]|\\[\\'"0nt])') { cout << "TOK_CHARCON{" << yytext << "}\n"; }
-(\"([^\\"\n]|\\[\\'"0nt])*\") { cout << "TOK_STRINGCON{" << yytext << "}\n"; }
-#[ ][0-9]+[ ](\"([^\\"\n]|\\[\\'"0nt])*\") { cout << "cpp_directive{" << yytext << "}\n"; }
+('([^\\'\n]|\\[\\'"0nt])') { 
+cout << "TOK_CHARCON{" << yytext << "}\n"; }
+(\"([^\\"\n]|\\[\\'"0nt])*\") { 
+cout << "TOK_STRINGCON{" << yytext << "}\n"; }
+#[ ][0-9]+[ ](\"([^\\"\n]|\\[\\'"0nt])*\") { scanner_include(); }
 [ \t\n] { }
 
 %%
