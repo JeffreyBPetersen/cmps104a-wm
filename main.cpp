@@ -51,11 +51,11 @@ int main (int argc, char** argv) {
       // get program name
       path = argv[arg_index];
       program_name = basename(strdup(path.c_str()));
-		if(program_name.substr(program_name.rfind(".")) != ".oc"){
-			fprintf(stderr, "File format must be .oc\n");
-			set_exitstatus(EXIT_FAILURE);
-			continue;
-		}
+      if(program_name.substr(program_name.rfind(".")) != ".oc"){
+         fprintf(stderr, "File format must be .oc\n");
+         set_exitstatus(EXIT_FAILURE);
+         continue;
+      }
       program_name = program_name.substr(0, program_name.rfind("."));
       string command = CPP + " " + path;
       
