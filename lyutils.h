@@ -12,6 +12,7 @@
 
 #define YYEOF 0
 
+extern ofstream tok_output;
 extern FILE* yyin;
 extern astree* yyparse_astree;
 extern int yyin_linenr;

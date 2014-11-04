@@ -1,5 +1,6 @@
 // Jeffrey Petersen | jebpeter@ucsc.edu
 
+#include <fstream>
 #include <iomanip>
 //DEBUG:
 #include <iostream>
@@ -15,6 +16,8 @@ using namespace std;
 
 #include "lyutils.h"
 #include "auxlib.h"
+
+ofstream tok_output;
 
 astree* yyparse_astree = NULL;
 int scan_linenr = 1;
@@ -74,8 +77,8 @@ int yylval_token (int symbol) {
                         scan_linenr, offset, yytext);
    //ADD: write to .tok file
    //DEBUG:
-   cout << right << setw(4) << yylval->filenr << 
-   setw(4) << yylval->linenr << "." << yylval->offset << 
+   tok_output << right << setw(4) << yylval->filenr << 
+   setw(4) << yylval->linenr << "." << offset << 
    setw(5) << yylval->symbol << "  " << 
    left << setw(16) << get_yytname(yylval->symbol) 
    << "(" << yylval->lexinfo->c_str() << ")\n";
@@ -106,5 +109,5 @@ void scanner_include (void) {
    }
    //ADD: write to .tok file
    //DEBUG:
-   cout << "# " << linenr << " \"" << filename << "\"\n";
+   tok_output << "# " << linenr << " \"" << filename << "\"\n";
 }

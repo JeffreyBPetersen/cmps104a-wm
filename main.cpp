@@ -59,7 +59,11 @@ int main (int argc, char** argv) {
          fprintf(stderr, "Failed to open file input pipe\n");
          set_exitstatus(EXIT_FAILURE);
       }else{
+         ofstream str_output;
+         str_output.open(program_name + ".str");
+         tok_output.open(program_name + ".tok");
          while(yylex() != YYEOF);
+         dump_stringset(str_output);
       }
       /*OLD: asg1 code
       // get piped input from c preprocessor
