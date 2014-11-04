@@ -74,9 +74,9 @@ int yylval_token (int symbol) {
                         scan_linenr, offset, yytext);
    //ADD: write to .tok file
    //DEBUG:
-   cout << right << setw(4) << "#" << 
-   setw(4) << "##" << "." << "###" << 
-   setw(5) << "###" << "  " << 
+   cout << right << setw(4) << yylval->filenr << 
+   setw(4) << yylval->linenr << "." << yylval->offset << 
+   setw(5) << yylval->symbol << "  " << 
    left << setw(16) << get_yytname(yylval->symbol) 
    << "(" << yylval->lexinfo->c_str() << ")\n";
    return symbol;
