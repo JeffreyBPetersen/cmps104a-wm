@@ -36,7 +36,6 @@ int main (int argc, char** argv) {
             break;
          case 'l':
             yy_flex_debug = 1;
-            fprintf(stderr, "Option '-l' not yet implemented\n");
             break;
          case 'y':
             fprintf(stderr, "Option '-y' not yet implemented\n");

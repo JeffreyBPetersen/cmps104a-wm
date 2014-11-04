@@ -24,9 +24,9 @@ return yylval_token(')'); }
 return yylval_token('['); }
 \] { scanner_useraction();
 return yylval_token(']'); }
-{ { scanner_useraction();
+\{ { scanner_useraction();
 return yylval_token('{'); }
-} { scanner_useraction();
+\} { scanner_useraction();
 return yylval_token('}'); }
 ; { scanner_useraction();
 return yylval_token(';'); }

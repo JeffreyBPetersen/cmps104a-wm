@@ -37,6 +37,9 @@ ${CLGEN} : ${LSOURCES}
 ${CYGEN} ${HYGEN} : ${YSOURCES}
 	bison --defines=${HYGEN} --output=${CYGEN} ${YSOURCES}
 
+fakesubmit :
+	cp ${CHECKINS} oc-programs
+
 style :
 	checksource ${CHECKINS}
 
