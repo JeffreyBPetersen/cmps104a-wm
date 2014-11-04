@@ -8,7 +8,12 @@ using namespace std;
 
 #include "auxlib.h"
 #include "cppstrtok.h"
+#include "lyutils.h"
 #include "stringset.h"
+#include "yyparse.h"
+
+extern FILE* yyin;
+extern int yylex();
 
 int main (int argc, char** argv) {
    int option;
@@ -16,6 +21,7 @@ int main (int argc, char** argv) {
    string program_name;
    
    // get flag options
+   yy_flex_debug = 0;
    while((option = getopt(argc, argv, "ly@:D:")) != -1){
       switch(option){
          case '@':
@@ -27,7 +33,7 @@ int main (int argc, char** argv) {
             "Option '-D' not yet implemented, string: %s\n", optarg);
             break;
          case 'l':
-            //ADD: enable yy_flex_debug
+            yy_flex_debug = 1;
             fprintf(stderr, "Option '-l' not yet implemented\n");
             break;
          case 'y':
@@ -44,10 +50,18 @@ int main (int argc, char** argv) {
       path = argv[arg_index];
       program_name = basename(strdup(path.c_str()));
       //ADD: check for .oc extension
-      //ADD: new program name finder that searches in reverse
       program_name = program_name.substr(0, program_name.find("."));
       string command = CPP + " " + path;
       
+      yyin = popen(command.c_str(), "r");
+      //yyin = popen("/usr/bin/cpp", "r");
+      if(yyin == NULL){
+         fprintf(stderr, "Failed to open file input pipe\n");
+         set_exitstatus(EXIT_FAILURE);
+      }else{
+         while(yylex() != YYEOF);
+      }
+      /*OLD: asg1 code
       // get piped input from c preprocessor
       FILE* pipe = popen(command.c_str(), "r");
       if(pipe == NULL){
@@ -74,6 +88,8 @@ int main (int argc, char** argv) {
       str_output.open(program_name + ".str");
       dump_stringset(str_output);
       str_output.close();
+      */
    }
+   
    return get_exitstatus();
 }

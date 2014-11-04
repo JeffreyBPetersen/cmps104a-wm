@@ -57,9 +57,7 @@ new { cout << "TOK_NEW{" << yytext << "}\n"; }
 [0-9]+ { cout << "TOK_INTCON{" << yytext << "}\n"; }
 ('([^\\'\n]|\\[\\'"0nt])') { cout << "TOK_CHARCON{" << yytext << "}\n"; }
 (\"([^\\"\n]|\\[\\'"0nt])*\") { cout << "TOK_STRINGCON{" << yytext << "}\n"; }
-[ \t\n] { cout << "whitespace{" << yytext << "}\n"; }
+#[ ][0-9]+[ ](\"([^\\"\n]|\\[\\'"0nt])*\") { cout << "cpp_directive{" << yytext << "}\n"; }
+[ \t\n] { }
 
 %%
-main() {
-   yylex();
-}

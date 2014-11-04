@@ -2,10 +2,6 @@ Jeffrey Petersen | jebpeter@ucsc.edu
 DOLOG
 ADD regex for cpp output directives
 ADD regex for invalid identifiers/characters/strings
-ADD set *yyin to read from cpp
-ADD loop calling yylex() from main
-REMOVE whitespace rule from scanner
 ADD output to .tok file
 UPDATE output to .str file
-ADD enabling yy_flex_debug on -l flag
 ADD identification of .oc file extension
