@@ -37,10 +37,6 @@ ${CLGEN} : ${LSOURCES}
 ${CYGEN} ${HYGEN} : ${YSOURCES}
 	bison --defines=${HYGEN} --output=${CYGEN} ${YSOURCES}
 
-testscan :
-	flex scanner.l
-	g++ lex.yy.c -lfl -o testscan
-
 style :
 	checksource ${CHECKINS}
 

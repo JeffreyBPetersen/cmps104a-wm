@@ -75,12 +75,11 @@ int yylval_token (int symbol) {
    int offset = scan_offset - yyleng;
    yylval = new_astree (symbol, included_filenames.size() - 1,
                         scan_linenr, offset, yytext);
-   //ADD: write to .tok file
-   //DEBUG:
    tok_output << right << setw(4) << yylval->filenr << 
-   setw(4) << yylval->linenr << "." << offset << 
-   setw(5) << yylval->symbol << "  " << 
-   left << setw(16) << get_yytname(yylval->symbol) 
+   setw(4) << yylval->linenr << "." << 
+   setfill('0') << setw(3) << offset << 
+   setfill(' ') << setw(5) << yylval->symbol << "  " << 
+   left << setw(16) << get_yytname(yylval->symbol)
    << "(" << yylval->lexinfo->c_str() << ")\n";
    return symbol;
 }
