@@ -17,50 +17,48 @@ using namespace std;
 %%
 
 \[\] { return yylval_token(TOK_ARRAY); }
-\( { cout << "open_paren{" << yytext << "}\n"; }
-\) { cout << "close_paren{" << yytext << "}\n"; }
-\[ { cout << "open_bracket" << yytext << "}\n"; }
-\] { cout << "close_bracket{" << yytext << "}\n"; }
-{ { cout << "open_brace{" << yytext << "}\n"; }\
-} { cout << "close_brace{" << yytext << "}\n"; }
-; { cout << "semicolon{" << yytext << "}\n"; }
-, { cout << "comma{" << yytext << "}\n"; }
-\. { cout << "period{" << yytext << "}\n"; }
-= { cout << "equals{" << yytext << "}\n"; }
-== { cout << "TOK_EQ{" << yytext << "}\n"; }
-!= { cout << "TOK_NE{" << yytext << "}\n"; }
-\< { cout << "TOK_LT{" << yytext << "}\n"; }
-\<= { cout << "TOK_LE{" << yytext << "}\n"; }
-> { cout << "TOK_GT{" << yytext << "}\n"; }
->= { cout << "TOK_GE{" << yytext << "}\n"; }
-\+ { cout << "plus{" << yytext << "}\n"; }
-- { cout << "minus{" << yytext << "}\n"; }
-\* { cout << "asterisk{" << yytext << "}\n"; }
-\/ { cout << "forward_slash{" << yytext << "}\n"; }
-% { cout << "modulus{" << yytext << "}\n"; }
-! { cout << "exclamation{" << yytext << "}\n"; }
-void { cout << "TOK_VOID{" << yytext << "}\n"; }
-bool { cout << "TOK_BOOL{" << yytext << "}\n"; }
-char { cout << "TOK_CHAR{" << yytext << "}\n"; }
-int { cout << "TOK_INT{" << yytext << "}\n"; }
-string { cout << "TOK_STRING{" << yytext << "}\n"; }
-struct { cout << "TOK_STRUCT{" << yytext << "}\n"; }
-if { cout << "TOK_IF{" << yytext << "}\n"; }
-else { cout << "TOK_ELSE{" << yytext << "}\n"; }
-while { cout << "TOK_WHILE{" << yytext << "}\n"; }
-return { cout << "TOK_RETURN{" << yytext << "}\n"; }
-false { cout << "TOK_FALSE{" << yytext << "}\n"; }
-true { cout << "TOK_TRUE{" << yytext << "}\n"; }
-null { cout << "TOK_NULL{" << yytext << "}\n"; }
-ord { cout << "TOK_ORD{" << yytext << "}\n"; }
-chr { cout << "TOK_CHR{" << yytext << "}\n"; }
-new { cout << "TOK_NEW{" << yytext << "}\n"; }
+\( { return yylval_token('('); }
+\) { return yylval_token(')'); }
+\[ { return yylval_token('['); }
+\] { return yylval_token(']'); }
+{ { return yylval_token('{'); }
+} { return yylval_token('}'); }
+; { return yylval_token(';'); }
+, { return yylval_token(','); }
+\. { return yylval_token('.'); }
+= { return yylval_token('='); }
+== { return yylval_token(TOK_EQ); }
+!= { return yylval_token(TOK_NE); }
+\< { return yylval_token(TOK_LT); }
+\<= { return yylval_token(TOK_LE); }
+> { return yylval_token(TOK_GT); }
+>= { return yylval_token(TOK_GE); }
+\+ { return yylval_token('+'); }
+- { return yylval_token('-'); }
+\* { return yylval_token('*'); }
+\/ { return yylval_token('/'); }
+% { return yylval_token('%'); }
+! { return yylval_token('!'); }
+void { return yylval_token(TOK_VOID); }
+bool { return yylval_token(TOK_BOOL); }
+char { return yylval_token(TOK_CHAR); }
+int { return yylval_token(TOK_INT); }
+string { return yylval_token(TOK_STRING); }
+struct { return yylval_token(TOK_STRUCT); }
+if { return yylval_token(TOK_IF); }
+else { return yylval_token(TOK_ELSE); }
+while { return yylval_token(TOK_WHILE); }
+return { return yylval_token(TOK_RETURN); }
+false { return yylval_token(TOK_FALSE); }
+true { return yylval_token(TOK_TRUE); }
+null { return yylval_token(TOK_NULL); }
+ord { return yylval_token(TOK_ORD); }
+chr { return yylval_token(TOK_CHR); }
+new { return yylval_token(TOK_NEW); }
 [a-zA-Z_][a-zA-Z0-9_]* { return yylval_token(TOK_IDENT); }
-[0-9]+ { cout << "TOK_INTCON{" << yytext << "}\n"; }
-('([^\\'\n]|\\[\\'"0nt])') { 
-cout << "TOK_CHARCON{" << yytext << "}\n"; }
-(\"([^\\"\n]|\\[\\'"0nt])*\") { 
-cout << "TOK_STRINGCON{" << yytext << "}\n"; }
+[0-9]+ { return yylval_token(TOK_INTCON); }
+('([^\\'\n]|\\[\\'"0nt])') { return yylval_token(TOK_CHARCON); }
+(\"([^\\"\n]|\\[\\'"0nt])*\") { return yylval_token(TOK_STRINGCON); }
 #[ ][0-9]+[ ](\"([^\\"\n]|\\[\\'"0nt])*\") { scanner_include(); }
 [ \t\n] { }
 
