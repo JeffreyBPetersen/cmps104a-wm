@@ -1,5 +1,1 @@
 Jeffrey Petersen | jebpeter@ucsc.edu
-DOLOG
-ADD regex for invalid identifiers/characters/strings
-FIX counters for .tok file output
-ADD identification of .oc file extension
