@@ -2,8 +2,6 @@
 
 #include <fstream>
 #include <iomanip>
-//DEBUG:
-#include <iostream>
 #include <string>
 #include <vector>
 using namespace std;
@@ -106,7 +104,5 @@ void scanner_include (void) {
       DEBUGF ('m', "filename=%s, scan_linenr=%d\n",
               included_filenames.back().c_str(), scan_linenr);
    }
-   //ADD: write to .tok file
-   //DEBUG:
    tok_output << "# " << linenr << " \"" << filename << "\"\n";
 }

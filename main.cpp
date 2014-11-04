@@ -51,12 +51,15 @@ int main (int argc, char** argv) {
       // get program name
       path = argv[arg_index];
       program_name = basename(strdup(path.c_str()));
-      //ADD: check for .oc extension
-      program_name = program_name.substr(0, program_name.find("."));
+		if(program_name.substr(program_name.rfind(".")) != ".oc"){
+			fprintf(stderr, "File format must be .oc\n");
+			set_exitstatus(EXIT_FAILURE);
+			continue;
+		}
+      program_name = program_name.substr(0, program_name.rfind("."));
       string command = CPP + " " + path;
       
       yyin = popen(command.c_str(), "r");
-      //yyin = popen("/usr/bin/cpp", "r");
       if(yyin == NULL){
          fprintf(stderr, "Failed to open file input pipe\n");
          set_exitstatus(EXIT_FAILURE);
@@ -67,34 +70,6 @@ int main (int argc, char** argv) {
          while(yylex() != YYEOF);
          dump_stringset(str_output);
       }
-      /*OLD: asg1 code
-      // get piped input from c preprocessor
-      FILE* pipe = popen(command.c_str(), "r");
-      if(pipe == NULL){
-         fprintf(stderr, "Failed to open file input pipe\n");
-         set_exitstatus(EXIT_FAILURE);
-      }else{
-      
-         // tokenize input from pipe
-         //ADD: new tokenization that uses scanner
-         tokens = cpplines(pipe, strdup(path.c_str()));
-         int cpp_exit = pclose(pipe);
-         if(cpp_exit != 0)
-            set_exitstatus(1);
-      }
-      
-      // add tokens to stringset
-      for(auto token_iter = tokens.begin();
-      token_iter != tokens.end(); ++token_iter){
-         intern_stringset(token_iter->c_str());
-      }
-      
-      // output stringset to .str file
-      ofstream str_output;
-      str_output.open(program_name + ".str");
-      dump_stringset(str_output);
-      str_output.close();
-      */
    }
    
    return get_exitstatus();
