@@ -44,6 +44,7 @@ int main (int argc, char** argv) {
       path = argv[arg_index];
       program_name = basename(strdup(path.c_str()));
       //ADD: check for .oc extension
+      //ADD: new program name finder that searches in reverse
       program_name = program_name.substr(0, program_name.find("."));
       string command = CPP + " " + path;
       
