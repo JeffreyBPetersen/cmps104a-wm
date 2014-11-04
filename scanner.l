@@ -1,9 +1,7 @@
 %{
 // Jeffrey Petersen | jebpeter@ucsc.edu
-#include <iostream>
 #include "lyutils.h"
 #include "yyparse.h"
-using namespace std;
 %}
 
 %option 8bit
