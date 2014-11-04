@@ -20,6 +20,8 @@ int main (int argc, char** argv) {
    string path;
    string program_name;
    
+   set_execname(argv[0]);
+   
    // get flag options
    yy_flex_debug = 0;
    while((option = getopt(argc, argv, "ly@:D:")) != -1){

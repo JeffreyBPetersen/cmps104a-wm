@@ -58,6 +58,18 @@ new { return yylval_token(TOK_NEW); }
 ('([^\\'\n]|\\[\\'"0nt])') { return yylval_token(TOK_CHARCON); }
 (\"([^\\"\n]|\\[\\'"0nt])*\") { return yylval_token(TOK_STRINGCON); }
 #[ ][0-9]+[ ](\"([^\\"\n]|\\[\\'"0nt])*\") { scanner_include(); }
+[0-9][a-zA-Z0-9_]* { scanner_badtoken(yytext);
+set_exitstatus(EXIT_FAILURE); }
+('([^\\'\n]|\\[\\'"0nt])) { scanner_badtoken(yytext);
+set_exitstatus(EXIT_FAILURE); }
+(\"([^\\"\n]|\\[\\'"0nt])*) { scanner_badtoken(yytext);
+set_exitstatus(EXIT_FAILURE); }
+('\\') { scanner_badtoken(yytext);
+set_exitstatus(EXIT_FAILURE); }
+(\"([^\\"\n]|\\)*\") { scanner_badtoken(yytext);
+set_exitstatus(EXIT_FAILURE); }
 [ \t\n] { }
+. { scanner_badchar(*yytext);
+set_exitstatus(EXIT_FAILURE); }
 
 %%
