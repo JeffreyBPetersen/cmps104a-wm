@@ -70,6 +70,7 @@ int main (int argc, char** argv) {
          dump_stringset(str_output);
       }
    }
-   
+   if(pclose(yyin) != 0)
+      set_exitstatus(EXIT_FAILURE);
    return get_exitstatus();
 }
