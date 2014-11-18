@@ -6,6 +6,7 @@
 #include <unistd.h>
 using namespace std;
 
+#include "astree.h"
 #include "auxlib.h"
 #include "cppstrtok.h"
 #include "lyutils.h"
@@ -64,10 +65,14 @@ int main (int argc, char** argv) {
          set_exitstatus(EXIT_FAILURE);
       }else{
          ofstream str_output;
+			FILE* ast_output;
          str_output.open(program_name + ".str");
          tok_output.open(program_name + ".tok");
-         while(yylex() != YYEOF);
+			ast_output = fopen((program_name + ".ast").c_str(), "w");
+         //while(yylex() != YYEOF);
+			yyparse();
          dump_stringset(str_output);
+			dump_astree(ast_output, yyparse_astree);
       }
    }
    if(pclose(yyin) != 0)

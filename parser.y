@@ -1,6 +1,5 @@
 %{
 // Jeffrey Petersen | jebpeter@ucsc.edu
-// Dummy parser for scanner project.
 
 #include "lyutils.h"
 #include "assert.h"
@@ -24,21 +23,65 @@
 %token TOK_POS TOK_NEG TOK_NEWARRAY TOK_TYPEID TOK_FIELD
 %token TOK_ORD TOK_CHR TOK_ROOT
 
-%start program
+%start start
 
 %%
 
-program : program token | ;
-token   : '(' | ')' | '[' | ']' | '{' | '}' | ';' | ',' | '.'
-        | '=' | '+' | '-' | '*' | '/' | '%' | '!'
-        | TOK_VOID | TOK_BOOL | TOK_CHAR | TOK_INT | TOK_STRING
-        | TOK_IF | TOK_ELSE | TOK_WHILE | TOK_RETURN | TOK_STRUCT
-        | TOK_FALSE | TOK_TRUE | TOK_NULL | TOK_NEW | TOK_ARRAY
-        | TOK_EQ | TOK_NE | TOK_LT | TOK_LE | TOK_GT | TOK_GE
-        | TOK_IDENT | TOK_INTCON | TOK_CHARCON | TOK_STRINGCON
-        | TOK_ORD | TOK_CHR | TOK_ROOT
-        ;
-
+start			: program				{ yyparse_astree = $1; }
+				;
+program		: program token		{ $$ = adopt1 ($1, $2); }
+				|							{ $$ = new_parseroot (); }
+				;
+token			: '(' | ')' | '[' | ']' | '{' | '}' | ';' | ',' | '.'
+				| '=' | '+' | '-' | '*' | '/' | '%' | '!'
+				| TOK_VOID | TOK_BOOL | TOK_CHAR | TOK_INT | TOK_STRING
+				| TOK_IF | TOK_ELSE | TOK_WHILE | TOK_RETURN | TOK_STRUCT
+				| TOK_FALSE | TOK_TRUE | TOK_NULL | TOK_NEW | TOK_ARRAY
+				| TOK_EQ | TOK_NE | TOK_LT | TOK_LE | TOK_GT | TOK_GE
+				| TOK_IDENT | TOK_INTCON | TOK_CHARCON | TOK_STRINGCON
+				| TOK_ORD | TOK_CHR | TOK_ROOT
+				;
+/*
+program		: program structdef	{ $$ = adopt1 ($1, $2); }
+				| program function	{ $$ = adopt1 ($1, $2); }
+				| program statement	{ $$ = adopt1 ($1, $2); }
+				| program error '}'	{ $$ = $1; }
+				| program error ';'	{ $$ = $1; }
+				|							{ $$ = new_parseroot (); }
+				;
+structdef	:
+				;
+fielddecl	:
+				;
+basetype		:
+				;
+function		:
+				;
+identdecl	:
+				;
+block			:
+				;
+statement	:
+				;
+vardecl		:
+				;
+while			:
+				;
+ifelse		:
+				;
+return		:
+				;
+expr			:
+				;
+allocator	:
+				;
+call			:
+				;
+variable		:
+				;
+constant		:
+				;
+*/
 %%
 
 const char *get_yytname (int symbol) {
