@@ -42,7 +42,7 @@ token       : '(' | ')' | '[' | ']' | '{' | '}' | ';' | ',' | '.'
             | TOK_ORD | TOK_CHR | TOK_ROOT
             ;
 /*
-program      : program structdef   { $$ = adopt1 ($1, $2); }
+program     : program structdef    { $$ = adopt1 ($1, $2); }
             | program function     { $$ = adopt1 ($1, $2); }
             | program statement    { $$ = adopt1 ($1, $2); }
             | program error '}'    { $$ = $1; }

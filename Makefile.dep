@@ -1,4 +1,5 @@
+astree.o: astree.cpp astree.h auxlib.h stringset.h lyutils.h yyparse.h
 auxlib.o: auxlib.cpp auxlib.h
-cppstrtok.o: cppstrtok.cpp auxlib.h cppstrtok.h
-main.o: main.cpp auxlib.h cppstrtok.h stringset.h
+lyutils.o: lyutils.cpp lyutils.h astree.h auxlib.h yyparse.h
+main.o: main.cpp astree.h auxlib.h lyutils.h yyparse.h stringset.h
 stringset.o: stringset.cpp stringset.h
