@@ -26,6 +26,7 @@
 %token TOK_BASETYPE TOK_CONSTANT TOK_EXPR TOK_FUNCTION TOK_PARAMLIST
 %token TOK_DECLID TOK_VARDECL TOK_PROTOTYPE
 
+%right TOK_IF TOK_ELSE
 %right '='
 %left TOK_EQ TOK_LE TOK_GT
 %left '+' '-'
@@ -92,6 +93,7 @@ block_rep   : block_rep statement { $$ = adopt1($1, $2); }
 statement   : block               { $$ = $1; }
             | vardecl             { $$ = $1; }
             | while               { $$ = $1; }
+            | ifelse              { $$ = $1; }
             | return              { $$ = $1; }
             | expr ';'            { free_ast($2);
                                     $$ = $1; }
@@ -103,6 +105,15 @@ vardecl     : identdecl '=' expr ';'
 while       : TOK_WHILE '(' expr ')' statement
                                   { free_ast2($2, $4);
                                     $$ = adopt2($1, $3, $5); }
+            ;
+ifelse      : TOK_IF '(' expr ')' statement %prec TOK_IF
+                                  { free_ast2($2, $4);
+											   $$ = adopt2($1, $3, $5); }
+            | TOK_IF '(' expr ')' statement TOK_ELSE statement
+				                      { free_ast2($2, $4);
+											   free_ast($6);
+											   adopt2sym($1, $3, $5, TOK_IFELSE);
+												$$ = adopt1($1, $7); }
             ;
 return      : TOK_RETURN expr ';' { free_ast($3);
                                     $$ = adopt1($1, $2); }
@@ -156,7 +167,6 @@ constant    : TOK_INTCON          { $$ = $1; }
             ;
 token       : '[' | ']' | ','
             | '/' | '%' | '!'
-            | TOK_IF | TOK_ELSE
             | TOK_ARRAY
             | TOK_NE | TOK_LT | TOK_GE
             | TOK_ORD | TOK_CHR | TOK_ROOT
