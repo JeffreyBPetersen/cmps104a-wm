@@ -72,7 +72,7 @@ int main (int argc, char** argv) {
          //while(yylex() != YYEOF);
 			yyparse();
          dump_stringset(str_output);
-			dump_astree(ast_output, yyparse_astree);
+			output_ast(ast_output, yyparse_astree);
       }
    }
    if(pclose(yyin) != 0)
