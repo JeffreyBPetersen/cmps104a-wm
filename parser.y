@@ -27,7 +27,7 @@
 %token TOK_DECLID TOK_VARDECL TOK_PROTOTYPE
 
 %right '='
-%left TOK_LE TOK_GT
+%left TOK_EQ TOK_LE TOK_GT
 %left '+' '-'
 %left '*'
 %left '.'
@@ -86,7 +86,7 @@ identdecl   : basetype TOK_IDENT  { update_sym($2, TOK_DECLID);
 block       : block_rep '}'       { $$ = $1; }
             | ';'                 { $$ = $1; }
             ;
-block_rep   : block_rep thing     { $$ = adopt1($1, $2); }
+block_rep   : block_rep statement { $$ = adopt1($1, $2); }
             | '{'                 { $$ = update_sym($1, TOK_BLOCK); }
             ;
 statement   : block               { $$ = $1; }
@@ -116,6 +116,7 @@ expr        : binop               { $$ = $1; }
             | constant            { $$ = $1; }
             ;
 binop       : expr '=' expr       { $$ = adopt2($2, $1, $3); }
+            | expr TOK_EQ expr    { $$ = adopt2($2, $1, $3); }
             | expr TOK_LE expr    { $$ = adopt2($2, $1, $3); }
             | expr TOK_GT expr    { $$ = adopt2($2, $1, $3); }
             | expr '+' expr       { $$ = adopt2($2, $1, $3); }
@@ -157,7 +158,7 @@ token       : '[' | ']' | ','
             | '/' | '%' | '!'
             | TOK_IF | TOK_ELSE
             | TOK_ARRAY
-            | TOK_EQ | TOK_NE | TOK_LT | TOK_GE
+            | TOK_NE | TOK_LT | TOK_GE
             | TOK_ORD | TOK_CHR | TOK_ROOT
             ;
 
