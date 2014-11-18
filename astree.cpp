@@ -80,14 +80,18 @@ void dump_astree (FILE* outfile, astree* root) {
 }
 
 static void output_ast_node (ostream& out, astree* node){
-	out << "NODE";
+	string name = get_yytname(node->symbol);
+	if(name.substr(0,4).compare("TOK_") == 0)
+		name = name.substr(4);
+	out << name << " \"" << *node->lexinfo << "\" " << node->filenr << 
+	"." << node->linenr << "." << node->offset;
 }
 
 static void output_ast_rec (ostream& out, astree* root, int depth){
 	if(root == NULL)
 		return;
 	for(int i = 0; i < depth; i++)
-		out << "|\t";
+		out << "|  ";
 	output_ast_node(out, root);
 	out << "\n";
 	for(size_t child = 0; child < root->children.size(); ++child){
