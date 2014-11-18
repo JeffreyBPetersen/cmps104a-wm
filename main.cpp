@@ -39,7 +39,7 @@ int main (int argc, char** argv) {
             yy_flex_debug = 1;
             break;
          case 'y':
-            fprintf(stderr, "Option '-y' not yet implemented\n");
+            yydebug = 1;
             break;
          default:
             set_exitstatus(EXIT_FAILURE);
@@ -65,14 +65,14 @@ int main (int argc, char** argv) {
          set_exitstatus(EXIT_FAILURE);
       }else{
          ofstream str_output;
-			ofstream ast_output;
+         ofstream ast_output;
          str_output.open(program_name + ".str");
          tok_output.open(program_name + ".tok");
-			ast_output.open(program_name + ".ast");
+         ast_output.open(program_name + ".ast");
          //while(yylex() != YYEOF);
-			yyparse();
+         yyparse();
          dump_stringset(str_output);
-			output_ast(ast_output, yyparse_astree);
+         output_ast(ast_output, yyparse_astree);
       }
    }
    if(pclose(yyin) != 0)
