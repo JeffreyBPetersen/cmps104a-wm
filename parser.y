@@ -23,7 +23,7 @@
 %token TOK_POS TOK_NEG TOK_NEWARRAY TOK_TYPEID TOK_FIELD
 %token TOK_ORD TOK_CHR TOK_ROOT
 
-%token TOK_BASETYPE TOK_CONSTANT TOK_EXPR TOK_FUNCTION TOK_PARAMLIST
+%token TOK_DEBUG TOK_FUNCTION TOK_PARAMLIST
 %token TOK_DECLID TOK_VARDECL TOK_PROTOTYPE
 
 %right TOK_IF TOK_ELSE
@@ -45,7 +45,7 @@ program     : program thing       { $$ = adopt1 ($1, $2); }
             | program statement   { $$ = adopt1 ($1, $2); }
             | /* empty */         { $$ = new_parseroot (); }
             ;
-thing       : token               { $$ = $1; }
+thing       : token               { $$ = update_sym($1, TOK_DEBUG); }
             ;
 structdef   : struct_rep '}'
                                   { free_ast($2);
@@ -61,6 +61,9 @@ struct_rep  : struct_rep fielddecl ';'
             ;
 fielddecl   : basetype TOK_IDENT  { update_sym($2, TOK_FIELD);
                                     $$ = adopt1($1, $2); }
+				| basetype TOK_ARRAY TOK_IDENT
+                                  { update_sym($3, TOK_FIELD);
+											   $$ = adopt2($2, $1, $3); }
             ;
 basetype    : TOK_VOID            { $$ = $1; }
             | TOK_BOOL            { $$ = $1; }
