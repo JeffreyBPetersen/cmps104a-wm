@@ -8,7 +8,6 @@ using namespace std;
 
 #include "astree.h"
 #include "auxlib.h"
-#include "cppstrtok.h"
 #include "lyutils.h"
 #include "stringset.h"
 #include "yyparse.h"
@@ -57,7 +56,7 @@ int main (int argc, char** argv) {
          continue;
       }
       program_name = program_name.substr(0, program_name.rfind("."));
-      string command = CPP + " " + path;
+      string command = "/usr/bin/cpp " + path;
       
       yyin = popen(command.c_str(), "r");
       if(yyin == NULL){
