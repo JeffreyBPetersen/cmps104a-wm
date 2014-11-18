@@ -49,7 +49,7 @@ astree* adopt2sym (astree* root, astree* left, astree* right,
    int symbol) {
    adopt1 (root, left);
    adopt1 (root, right);
-	root->symbol = symbol;
+   root->symbol = symbol;
    return root;
 }
 
@@ -58,16 +58,17 @@ astree* update_sym (astree* root, int symbol) {
    return root;
 }
 
-astree* new_function (astree* identdecl, astree* paramlist, astree* block){
+astree* new_function (astree* identdecl, astree* paramlist,
+   astree* block){
    astree* func = new_astree(TOK_FUNCTION, identdecl->filenr,
       identdecl->linenr, identdecl->offset, "");
    adopt1(func, identdecl);
-	adopt1(func, paramlist);
-	if(block->lexinfo->compare(";") == 0)
+   adopt1(func, paramlist);
+   if(block->lexinfo->compare(";") == 0)
       func->symbol = TOK_PROTOTYPE;
-	else
-		adopt1(func, block);
-	return func;
+   else
+      adopt1(func, block);
+   return func;
 }
 
 static void dump_node (FILE* outfile, astree* node) {
