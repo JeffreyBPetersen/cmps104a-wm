@@ -23,7 +23,8 @@
 %token TOK_POS TOK_NEG TOK_NEWARRAY TOK_TYPEID TOK_FIELD
 %token TOK_ORD TOK_CHR TOK_ROOT
 
-%token TOK_BASETYPE TOK_CONSTANT TOK_EXPR TOK_FUNCTION TOK_PARAMLIST TOK_VARDECL
+%token TOK_BASETYPE TOK_CONSTANT TOK_EXPR TOK_FUNCTION TOK_PARAMLIST
+%token TOK_DECLID TOK_VARDECL
 
 %right '='
 %left TOK_LE TOK_GT
@@ -45,11 +46,11 @@ thing       : function            { $$ = $1; }
             | expr                { $$ = $1; }
             | token               { $$ = $1; }
             ;
-basetype    : TOK_VOID            { $$ = update_sym($1, TOK_BASETYPE); }
-            | TOK_BOOL            { $$ = update_sym($1, TOK_BASETYPE); }
-            | TOK_CHAR            { $$ = update_sym($1, TOK_BASETYPE); }
-            | TOK_INT             { $$ = update_sym($1, TOK_BASETYPE); }
-            | TOK_STRING          { $$ = update_sym($1, TOK_BASETYPE); }
+basetype    : TOK_VOID            { $$ = $1; }
+            | TOK_BOOL            { $$ = $1; }
+            | TOK_CHAR            { $$ = $1; }
+            | TOK_INT             { $$ = $1; }
+            | TOK_STRING          { $$ = $1; }
             ;
 function    : identdecl paramlist ')' block
                                   { free_ast($3);
@@ -58,7 +59,8 @@ function    : identdecl paramlist ')' block
 paramlist   : paramlist identdecl { $$ = adopt1($1, $2); }
             | '('                 { $$ = update_sym($1, TOK_PARAMLIST); }
             ;
-identdecl   : basetype TOK_IDENT  { $$ = adopt1($1, $2); }
+identdecl   : basetype TOK_IDENT  { update_sym($2, TOK_DECLID); 
+                                    $$ = adopt1($1, $2); }
             ;
 block       : block_rep '}'       { $$ = $1; }
             ;
@@ -84,9 +86,9 @@ return      : TOK_RETURN expr ';' { free_ast($3);
             | TOK_RETURN ';'      { free_ast($2);
                                     $$ = $1; }
             ;
-expr        : binop               { $$ = update_sym($1, TOK_EXPR); }
+expr        : binop               { $$ = $1; }
             | call                { $$ = $1; }
-            | variable            { $$ = update_sym($1, TOK_EXPR); }
+            | variable            { $$ = $1; }
             | constant            { $$ = $1; }
             ;
 binop       : expr '=' expr       { $$ = adopt2($2, $1, $3); }
@@ -107,12 +109,12 @@ call_rep    : call_rep ',' expr   { free_ast($2);
             ;
 variable    : TOK_IDENT           { $$ = $1; }
             ;
-constant    : TOK_INTCON          { $$ = update_sym($1, TOK_CONSTANT); }
-            | TOK_CHARCON         { $$ = update_sym($1, TOK_CONSTANT); }
-            | TOK_STRINGCON       { $$ = update_sym($1, TOK_CONSTANT); }
-            | TOK_FALSE           { $$ = update_sym($1, TOK_CONSTANT); }
-            | TOK_TRUE            { $$ = update_sym($1, TOK_CONSTANT); }
-            | TOK_NULL            { $$ = update_sym($1, TOK_CONSTANT); }
+constant    : TOK_INTCON          { $$ = $1; }
+            | TOK_CHARCON         { $$ = $1; }
+            | TOK_STRINGCON       { $$ = $1; }
+            | TOK_FALSE           { $$ = $1; }
+            | TOK_TRUE            { $$ = $1; }
+            | TOK_NULL            { $$ = $1; }
             ;
 token       : '[' | ']' | ',' | '.'
             | '+' | '/' | '%' | '!'
