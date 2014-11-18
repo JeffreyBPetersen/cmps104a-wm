@@ -63,7 +63,10 @@ astree* new_function (astree* identdecl, astree* paramlist, astree* block){
       identdecl->linenr, identdecl->offset, "");
    adopt1(func, identdecl);
 	adopt1(func, paramlist);
-	adopt1(func, block);
+	if(block->lexinfo->compare(";") == 0)
+      func->symbol = TOK_PROTOTYPE;
+	else
+		adopt1(func, block);
 	return func;
 }
 

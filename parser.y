@@ -24,7 +24,7 @@
 %token TOK_ORD TOK_CHR TOK_ROOT
 
 %token TOK_BASETYPE TOK_CONSTANT TOK_EXPR TOK_FUNCTION TOK_PARAMLIST
-%token TOK_DECLID TOK_VARDECL
+%token TOK_DECLID TOK_VARDECL TOK_PROTOTYPE
 
 %right '='
 %left TOK_LE TOK_GT
@@ -72,11 +72,16 @@ function    : identdecl paramlist ')' block
                                   { free_ast($3);
                                     $$ = new_function($1, $2, $4); }
             ;
-paramlist   : paramlist identdecl { $$ = adopt1($1, $2); }
+paramlist   : paramlist ',' identdecl
+                                  { free_ast($2);
+                                    $$ = adopt1($1, $3); }
+            | '(' identdecl       { $$ = adopt1sym($1, $2, TOK_PARAMLIST); }
             | '('                 { $$ = update_sym($1, TOK_PARAMLIST); }
             ;
 identdecl   : basetype TOK_IDENT  { update_sym($2, TOK_DECLID); 
                                     $$ = adopt1($1, $2); }
+            | basetype TOK_ARRAY TOK_IDENT
+                                  { $$ = adopt2($2, $1, $3); }
             ;
 block       : block_rep '}'       { $$ = $1; }
             | ';'                 { $$ = $1; }
@@ -121,6 +126,10 @@ allocator   : TOK_NEW TOK_IDENT '(' ')'
                                   { free_ast2($3, $4);
                                     update_sym($2, TOK_TYPEID);
                                     $$ = adopt1($1, $2); }
+            | TOK_NEW basetype '[' expr ']'
+                                  { free_ast2($3, $5);
+											   update_sym($2, TOK_TYPEID);
+												adopt2sym($1, $2, $4, TOK_NEWARRAY); }
             ;
 call        : TOK_IDENT '(' call_rep ')'
                                   { free_ast($4);
