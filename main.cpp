@@ -65,10 +65,10 @@ int main (int argc, char** argv) {
          set_exitstatus(EXIT_FAILURE);
       }else{
          ofstream str_output;
-			FILE* ast_output;
+			ofstream ast_output;
          str_output.open(program_name + ".str");
          tok_output.open(program_name + ".tok");
-			ast_output = fopen((program_name + ".ast").c_str(), "w");
+			ast_output.open(program_name + ".ast");
          //while(yylex() != YYEOF);
 			yyparse();
          dump_stringset(str_output);

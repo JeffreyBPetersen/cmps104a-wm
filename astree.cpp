@@ -60,7 +60,7 @@ static void dump_node (FILE* outfile, astree* node) {
    fprintf (outfile, "]}");
 }
 
-static void dump_astree_rec (FILE* outfile, astree* root,
+/*static void dump_astree_rec (FILE* outfile, astree* root,
                              int depth) {
    if (root == NULL) return;
    fprintf (outfile, "%*s%s ", depth * 3, "",
@@ -77,6 +77,10 @@ static void dump_astree_rec (FILE* outfile, astree* root,
 void dump_astree (FILE* outfile, astree* root) {
    dump_astree_rec (outfile, root, 0);
    fflush (NULL);
+}*/
+
+void dump_astree (ostream& out, astree* root){
+	out << "PLACEHOLDER TEXT WOO\n";
 }
 
 void yyprint (FILE* outfile, unsigned short toknum,

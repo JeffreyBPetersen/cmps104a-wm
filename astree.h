@@ -3,6 +3,7 @@
 #ifndef __ASTREE_H__
 #define __ASTREE_H__
 
+#include <iostream>
 #include <string>
 #include <vector>
 using namespace std;
@@ -24,7 +25,7 @@ astree* new_astree (int symbol, int filenr, int linenr,
 astree* adopt1 (astree* root, astree* child);
 astree* adopt2 (astree* root, astree* left, astree* right);
 astree* adopt1sym (astree* root, astree* child, int symbol);
-void dump_astree (FILE* outfile, astree* root);
+void dump_astree (ostream& out, astree* root);
 void yyprint (FILE* outfile, unsigned short toknum,
               astree* yyvaluep);
 void free_ast (astree* tree);
