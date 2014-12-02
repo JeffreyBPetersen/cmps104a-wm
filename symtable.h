@@ -31,4 +31,6 @@ struct symbol{
 	vector<symbol*>* parameters;
 };
 
+void gen_symtable(struct astree* root);
+
 #endif
