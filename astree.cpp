@@ -114,8 +114,45 @@ static void output_ast_node (ostream& out, astree* node){
    string name = get_yytname(node->symbol);
    if(name.substr(0,4).compare("TOK_") == 0)
       name = name.substr(4);
-   out << name << " \"" << *node->lexinfo << "\" " << node->filenr << 
-   "." << node->linenr << "." << node->offset;
+   out << name << " \"" << *node->lexinfo << "\" (" << node->filenr << 
+   "." << node->linenr << "." << node->offset << ") {" <<
+	node->blocknr << "}";
+	if(node->attributes[ATTR_void])
+		out << " void";
+	if(node->attributes[ATTR_bool])
+		out << " bool";
+	if(node->attributes[ATTR_char])
+		out << " char";
+	if(node->attributes[ATTR_int])
+		out << " int";
+	if(node->attributes[ATTR_null])
+		out << " null";
+	if(node->attributes[ATTR_string])
+		out << " string";
+	if(node->attributes[ATTR_struct])
+		out << " struct \"" << "PLACEHOLDER_for_struct_name" << "\"";
+	if(node->attributes[ATTR_array])
+		out << " array";
+	if(node->attributes[ATTR_function])
+		out << " function";
+	if(node->attributes[ATTR_variable])
+		out << " variable";
+	if(node->attributes[ATTR_field])
+		out << " field";
+	if(node->attributes[ATTR_typeid])
+		out << " typeid";
+	if(node->attributes[ATTR_param])
+		out << " param";
+	if(node->attributes[ATTR_lval])
+		out << " lval";
+	if(node->attributes[ATTR_const])
+		out << " const";
+	if(node->attributes[ATTR_vreg])
+		out << " vreg";
+	if(node->attributes[ATTR_vaddr])
+		out << " vaddr";
+	if(name.compare("IDENT") == 0)
+		out << " (" << "PLACEHOLDER_for_declaration_coordinates" << ")";
 }
 
 static void output_ast_rec (ostream& out, astree* root, int depth){
