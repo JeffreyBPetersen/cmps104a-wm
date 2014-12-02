@@ -58,8 +58,7 @@ clean :
 	- rm ${OBJECTS}
 
 spotless : clean
-	- rm ${EXECBIN} ${DEPFILE} \
-	     test.out test.err yylex.output yyparse.output
+	- rm ${EXECBIN} ${DEPFILE} yylex.output yyparse.output
 
 ${DEPFILE} :
 	${MKDEP} ${SOURCES} >${DEPFILE}
@@ -72,6 +71,3 @@ submit:
 	submit cmps104a-wm.f14 asg4 ${CHECKINS}
 
 include Makefile.dep
-
-test : ${EXECBIN}
-	${VALGRIND} ${EXECBIN} foo.oc 1>test.out 2>test.err
