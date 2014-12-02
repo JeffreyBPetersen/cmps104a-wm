@@ -60,16 +60,23 @@ void output_symnode(symbol* node){
 void gen_symtable_rec(astree* root){
    switch(root->symbol){
       case TOK_BLOCK:
-         //IMPLEMENT
+         //IMPLEMENT push_back to symbol_stack
+         //IMPLEMENT recurse on children
          break;
       case TOK_IF:
-         //IMPLEMENT
+         //IMPLEMENT type check condition
+         //IMPLEMENT recurse on block
          break;
       case TOK_IFELSE:
-         //IMPLEMENT
+         //IMPLEMENT type check condition
+         //IMPLEMENT recurse on block
+         //IMPLEMENT recurse on else
          break;
       case TOK_RETURN:
-         //IMPLEMENT
+         //IMPLEMENT type check
+         // return nothing when at global scope
+         // return return_type when in function
+         //  IMPLEMENT checking return type of function
          break;
       case TOK_VARDECL:
          struct symbol* variable;
@@ -104,21 +111,27 @@ void gen_symtable_rec(astree* root){
          }
          if(symbol_stack.back() == nullptr)
             symbol_stack.back() = new symbol_table;
-         symbol_stack.back()->insert(
+         //IMPLEMENT check for conflicting definition
+         if(false){
+            //IMPLEMENT error message
+         }
+         else 
+            symbol_stack.back()->insert(
             {root->children[0]->lexinfo,variable});
          output_symnode(variable);
          break;
       case TOK_WHILE:
-         //IMPLEMENT
+         //IMPLEMENT type check condition
+         //IMPLEMENT recurse on block
          break;
       case '=':
-         //IMPLEMENT
+         //IMPLEMENT type checking
          break;
       case TOK_EQ:
       case TOK_NE:
          root->attributes[ATTR_bool] = true;
          root->attributes[ATTR_vreg] = true;
-         //IMPLEMENT type check
+         //IMPLEMENT type checking
          break;
       case TOK_GE:
       case TOK_GT:
@@ -126,7 +139,7 @@ void gen_symtable_rec(astree* root){
       case TOK_LT:
          root->attributes[ATTR_bool] = true;
          root->attributes[ATTR_vreg] = true;
-         //IMPLEMENT type check
+         //IMPLEMENT type checking
          break;
       case '+':
       case '-':
@@ -137,31 +150,36 @@ void gen_symtable_rec(astree* root){
       case TOK_NEG:
          root->attributes[ATTR_int] = true;
          root->attributes[ATTR_vreg] = true;
-         //IMPLEMENT type check
+         //IMPLEMENT type checking
          break;
       case '!':
          root->attributes[ATTR_bool] = true;
          root->attributes[ATTR_vreg] = true;
-         //IMPLEMENT type check
+         //IMPLEMENT type checking
          break;
       case TOK_ORD:
          root->attributes[ATTR_int] = true;
          root->attributes[ATTR_vreg] = true;
-         //IMPLEMENT type check
+         //IMPLEMENT type checking
          break;
       case TOK_CHR:
          root->attributes[ATTR_char] = true;
          root->attributes[ATTR_vreg] = true;
-         //IMPLEMENT type check
+         //IMPLEMENT type checking
          break;
       case TOK_NEW:
-         //IMPLEMENT
+         //IMPLEMENT switch for varieties of new
+         //IMPLEMENT type checking
          break;
       case TOK_CALL:
-         //IMPLEMENT
+         //IMPLEMENT lookup function
+         //IMPLEMENT type checking on parameters
+         //IMPLEMENT set attributes by return type
          break;
       case TOK_IDENT:
-         //IMPLEMENT
+         //IMPLEMENT lookup identifier
+         //IMPLEMENT lookup identifier with field
+         //IMPLEMENT set attributes by type
          break;
       case TOK_INTCON:
          root->attributes[ATTR_const] = true;
@@ -197,13 +215,18 @@ void gen_symtable(astree* root){
    for(size_t child = 0; child < root->children.size(); ++child){
       switch(root->children[child]->symbol){
          case TOK_FUNCTION:
-            //IMPLEMENT
+            //IMPLEMENT check for conflicting definition
+            //IMPLEMENT add to global identifiers
+            //IMPLEMENT enter block, push_back parameters, and recurse
             break;
          case TOK_PROTOTYPE:
-            //IMPLEMENT
+            //IMPLEMENT check for conflicting definition
+            //IMPLEMENT add to global identifiers if absent
             break;
          case TOK_STRUCT:
-            //IMPLEMENT
+            //IMPLEMENT check for conflicting definitions
+            //IMPLEMENT add to type_name_table
+            //IMPLEMENT add fields if full definition
             break;
          default:
             gen_symtable_rec(root->children[child]);
