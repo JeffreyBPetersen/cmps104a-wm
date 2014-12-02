@@ -59,16 +59,28 @@ void gen_symtable_rec(astree* root){
       case TOK_IDENT:
          break;
       case TOK_INTCON:
+         root->attributes[ATTR_const] = true;
+         root->attributes[ATTR_int] = true;
          break;
       case TOK_CHARCON:
+         root->attributes[ATTR_char] = true;
+         root->attributes[ATTR_const] = true;
          break;
       case TOK_STRINGCON:
+         root->attributes[ATTR_const] = true;
+         root->attributes[ATTR_string] = true;
          break;
       case TOK_FALSE:
+         root->attributes[ATTR_bool] = true;
+         root->attributes[ATTR_const] = true;
          break;
       case TOK_TRUE:
+         root->attributes[ATTR_bool] = true;
+         root->attributes[ATTR_const] = true;
          break;
       case TOK_NULL:
+         root->attributes[ATTR_const] = true;
+         root->attributes[ATTR_null] = true;
          break;
    }
    /*
