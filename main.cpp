@@ -68,8 +68,16 @@ int main (int argc, char** argv) {
          str_output.open(program_name + ".str");
          tok_output.open(program_name + ".tok");
          ast_output.open(program_name + ".ast");
+			//IMPLEMENT: sym_output.open(program_name + ".sym");
          //while(yylex() != YYEOF);
          yyparse();
+			/*IMPLEMENT:
+			parse AST
+				generate symbol tables
+					output to .sym
+				generate and validate types
+					add info to ast
+			*/
          dump_stringset(str_output);
          output_ast(ast_output, yyparse_astree);
       }

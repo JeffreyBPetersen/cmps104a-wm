@@ -7,8 +7,8 @@ VALGRIND   = valgrind --leak-check=full --show-reachable=yes
 MKFILE     = Makefile
 DEPFILE    = Makefile.dep
 SOURCES    = astree.cpp auxlib.cpp \
-lyutils.cpp main.cpp stringset.cpp
-HEADERS    = astree.h auxlib.h lyutils.h stringset.h
+lyutils.cpp main.cpp stringset.cpp symtable.cpp
+HEADERS    = astree.h auxlib.h lyutils.h stringset.h symtable.h
 OBJECTS    = ${CLGEN} ${HYGEN} ${CYGEN} ${SOURCES:.cpp=.o}
 EXECBIN    = oc
 SRCFILES   = ${HEADERS} ${SOURCES} ${MKFILE}
