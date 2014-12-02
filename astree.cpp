@@ -20,10 +20,10 @@ astree* new_astree (int symbol, int filenr, int linenr,
    tree->linenr = linenr;
    tree->offset = offset;
    tree->lexinfo = intern_stringset (lexinfo);
-	//asg4 additions
-	tree->attributes = 0;
-	tree->blocknr = 0;
-	tree->symnode = nullptr;
+   //asg4 additions
+   tree->attributes = 0;
+   tree->blocknr = 0;
+   tree->symnode = nullptr;
    DEBUGF ('f', "astree %p->{%d:%d.%d: %s: \"%s\"}\n",
            tree, tree->filenr, tree->linenr, tree->offset,
            get_yytname (tree->symbol), tree->lexinfo->c_str());
@@ -116,43 +116,43 @@ static void output_ast_node (ostream& out, astree* node){
       name = name.substr(4);
    out << name << " \"" << *node->lexinfo << "\" (" << node->filenr << 
    "." << node->linenr << "." << node->offset << ") {" <<
-	node->blocknr << "}";
-	if(node->attributes[ATTR_void])
-		out << " void";
-	if(node->attributes[ATTR_bool])
-		out << " bool";
-	if(node->attributes[ATTR_char])
-		out << " char";
-	if(node->attributes[ATTR_int])
-		out << " int";
-	if(node->attributes[ATTR_null])
-		out << " null";
-	if(node->attributes[ATTR_string])
-		out << " string";
-	if(node->attributes[ATTR_struct])
-		out << " struct \"" << "PLACEHOLDER_for_struct_name" << "\"";
-	if(node->attributes[ATTR_array])
-		out << " array";
-	if(node->attributes[ATTR_function])
-		out << " function";
-	if(node->attributes[ATTR_variable])
-		out << " variable";
-	if(node->attributes[ATTR_field])
-		out << " field";
-	if(node->attributes[ATTR_typeid])
-		out << " typeid";
-	if(node->attributes[ATTR_param])
-		out << " param";
-	if(node->attributes[ATTR_lval])
-		out << " lval";
-	if(node->attributes[ATTR_const])
-		out << " const";
-	if(node->attributes[ATTR_vreg])
-		out << " vreg";
-	if(node->attributes[ATTR_vaddr])
-		out << " vaddr";
-	if(name.compare("IDENT") == 0)
-		out << " (" << "PLACEHOLDER_for_declaration_coordinates" << ")";
+   node->blocknr << "}";
+   if(node->attributes[ATTR_void])
+      out << " void";
+   if(node->attributes[ATTR_bool])
+      out << " bool";
+   if(node->attributes[ATTR_char])
+      out << " char";
+   if(node->attributes[ATTR_int])
+      out << " int";
+   if(node->attributes[ATTR_null])
+      out << " null";
+   if(node->attributes[ATTR_string])
+      out << " string";
+   if(node->attributes[ATTR_struct])
+      out << " struct \"" << "PLACEHOLDER_for_struct_name" << "\"";
+   if(node->attributes[ATTR_array])
+      out << " array";
+   if(node->attributes[ATTR_function])
+      out << " function";
+   if(node->attributes[ATTR_variable])
+      out << " variable";
+   if(node->attributes[ATTR_field])
+      out << " field";
+   if(node->attributes[ATTR_typeid])
+      out << " typeid";
+   if(node->attributes[ATTR_param])
+      out << " param";
+   if(node->attributes[ATTR_lval])
+      out << " lval";
+   if(node->attributes[ATTR_const])
+      out << " const";
+   if(node->attributes[ATTR_vreg])
+      out << " vreg";
+   if(node->attributes[ATTR_vaddr])
+      out << " vaddr";
+   if(node->symbol == TOK_IDENT)
+      out << " (" << "PLACEHOLDER_for_declaration_coordinates" << ")";
 }
 
 static void output_ast_rec (ostream& out, astree* root, int depth){

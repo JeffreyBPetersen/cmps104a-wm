@@ -69,10 +69,10 @@ int main (int argc, char** argv) {
          str_output.open(program_name + ".str");
          tok_output.open(program_name + ".tok");
          ast_output.open(program_name + ".ast");
-			sym_output.open(program_name + ".sym");
+         sym_output.open(program_name + ".sym");
          //while(yylex() != YYEOF);
          yyparse();
-			gen_symtable(yyparse_astree);
+         gen_symtable(yyparse_astree);
          dump_stringset(str_output);
          output_ast(ast_output, yyparse_astree);
       }
