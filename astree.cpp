@@ -10,6 +10,7 @@
 #include "astree.h"
 #include "stringset.h"
 #include "lyutils.h"
+#include "symtable.h"
 
 astree* new_astree (int symbol, int filenr, int linenr,
                     int offset, const char* lexinfo) {
@@ -19,6 +20,10 @@ astree* new_astree (int symbol, int filenr, int linenr,
    tree->linenr = linenr;
    tree->offset = offset;
    tree->lexinfo = intern_stringset (lexinfo);
+	//asg4 additions
+	tree->attributes = 0;
+	tree->blocknr = 0;
+	tree->symnode = nullptr;
    DEBUGF ('f', "astree %p->{%d:%d.%d: %s: \"%s\"}\n",
            tree, tree->filenr, tree->linenr, tree->offset,
            get_yytname (tree->symbol), tree->lexinfo->c_str());
