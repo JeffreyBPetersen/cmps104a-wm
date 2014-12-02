@@ -74,7 +74,12 @@ void gen_symtable_rec(astree* root){
       case TOK_VARDECL:
          struct symbol* variable;
          variable = new struct symbol;
-         //IMPLEMENT set variable details
+         // last child (DECLID) of first child {type}
+         //    is identifier with coordinates
+         variable->filenr = root->children[0]->children.back()->filenr;
+         variable->linenr = root->children[0]->children.back()->linenr;
+         variable->offset = root->children[0]->children.back()->offset;
+         //IMPLEMENT set variable attributes
          //IMPLEMENT type checking
          //switch on variable type
          switch(root->children[0]->symbol){
