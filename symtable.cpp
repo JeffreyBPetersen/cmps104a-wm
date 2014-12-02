@@ -14,6 +14,49 @@ int next_block;
 
 string reserved_words[] = {"void", "bool", "char", "int", "string"};
 
+void output_symnode(symbol* node){
+   for(int i = 0; i < (int)symbol_stack.size() - 1; i++)
+      sym_output << "   ";
+   sym_output << "PLACEHOLDER_identifier" << " (" << node->filenr <<
+      "." << node->linenr << "." << node->offset << ") {" <<
+      node->blocknr << "}";
+   if(node->attributes[ATTR_void])
+      sym_output << " void";
+   if(node->attributes[ATTR_bool])
+      sym_output << " bool";
+   if(node->attributes[ATTR_char])
+      sym_output << " char";
+   if(node->attributes[ATTR_int])
+      sym_output << " int";
+   if(node->attributes[ATTR_null])
+      sym_output << " null";
+   if(node->attributes[ATTR_string])
+      sym_output << " string";
+   if(node->attributes[ATTR_struct])
+      sym_output << " struct \"" << "PLACEHOLDER_struct_name" << "\"";
+   if(node->attributes[ATTR_array])
+      sym_output << " array";
+   if(node->attributes[ATTR_function])
+      sym_output << " function";
+   if(node->attributes[ATTR_variable])
+      sym_output << " variable";
+   if(node->attributes[ATTR_field])
+      sym_output << " field {" << "PLACEHOLDER_struct_name" << "}";
+   if(node->attributes[ATTR_typeid])
+      sym_output << " typeid";
+   if(node->attributes[ATTR_param])
+      sym_output << " param";
+   if(node->attributes[ATTR_lval])
+      sym_output << " lval";
+   if(node->attributes[ATTR_const])
+      sym_output << " const";
+   if(node->attributes[ATTR_vreg])
+      sym_output << " vreg";
+   if(node->attributes[ATTR_vaddr])
+      sym_output << " vaddr";
+   sym_output << endl;
+}
+
 void gen_symtable_rec(astree* root){
    switch(root->symbol){
       case TOK_BLOCK:
@@ -56,7 +99,9 @@ void gen_symtable_rec(astree* root){
          }
          if(symbol_stack.back() == nullptr)
             symbol_stack.back() = new symbol_table;
-         symbol_stack.back()->insert({root->children[0]->lexinfo,variable});
+         symbol_stack.back()->insert(
+            {root->children[0]->lexinfo,variable});
+         output_symnode(variable);
          break;
       case TOK_WHILE:
          //IMPLEMENT
@@ -138,11 +183,6 @@ void gen_symtable_rec(astree* root){
          root->attributes[ATTR_null] = true;
          break;
    }
-   /*
-   for(int i = 0; i < (int)symbol_stack.size() - 1; i++)
-      cout << "   ";
-   sym_output << "PLACEHOLDER\n";
-   */
 }
 
 void gen_symtable(astree* root){
