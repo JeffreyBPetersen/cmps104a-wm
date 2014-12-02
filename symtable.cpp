@@ -17,26 +17,39 @@ string reserved_words[] = {"void", "bool", "char", "int", "string"};
 void gen_symtable_rec(astree* root){
    switch(root->symbol){
       case TOK_BLOCK:
+         //IMPLEMENT
          break;
       case TOK_IF:
+         //IMPLEMENT
          break;
       case TOK_IFELSE:
+         //IMPLEMENT
          break;
       case TOK_RETURN:
+         //IMPLEMENT
          break;
       case TOK_VARDECL:
+         //IMPLEMENT
          break;
       case TOK_WHILE:
+         //IMPLEMENT
          break;
       case '=':
+         //IMPLEMENT
          break;
       case TOK_EQ:
       case TOK_NE:
+         root->attributes[ATTR_bool] = true;
+         root->attributes[ATTR_vreg] = true;
+         //IMPLEMENT type check
          break;
       case TOK_GE:
       case TOK_GT:
       case TOK_LE:
       case TOK_LT:
+         root->attributes[ATTR_bool] = true;
+         root->attributes[ATTR_vreg] = true;
+         //IMPLEMENT type check
          break;
       case '+':
       case '-':
@@ -45,18 +58,33 @@ void gen_symtable_rec(astree* root){
       case '%':
       case TOK_POS:
       case TOK_NEG:
+         root->attributes[ATTR_int] = true;
+         root->attributes[ATTR_vreg] = true;
+         //IMPLEMENT type check
          break;
       case '!':
+         root->attributes[ATTR_bool] = true;
+         root->attributes[ATTR_vreg] = true;
+         //IMPLEMENT type check
          break;
       case TOK_ORD:
+         root->attributes[ATTR_int] = true;
+         root->attributes[ATTR_vreg] = true;
+         //IMPLEMENT type check
          break;
       case TOK_CHR:
+         root->attributes[ATTR_char] = true;
+         root->attributes[ATTR_vreg] = true;
+         //IMPLEMENT type check
          break;
       case TOK_NEW:
+         //IMPLEMENT
          break;
       case TOK_CALL:
+         //IMPLEMENT
          break;
       case TOK_IDENT:
+         //IMPLEMENT
          break;
       case TOK_INTCON:
          root->attributes[ATTR_const] = true;
