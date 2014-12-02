@@ -22,8 +22,8 @@ enum{ ATTR_void, ATTR_bool, ATTR_char, ATTR_int, ATTR_null,
 using attr_bitset = bitset<ATTR_bitset_size>;
 
 struct symbol;
-using symbol_table = unordered_map<string*, symbol*>;
-using symbol_entry = pair<string*, symbol*>;
+using symbol_table = unordered_map<const string*, symbol*>;
+using symbol_entry = pair<const string*, symbol*>;
 
 struct symbol{
    attr_bitset attributes;

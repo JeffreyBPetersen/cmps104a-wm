@@ -29,7 +29,34 @@ void gen_symtable_rec(astree* root){
          //IMPLEMENT
          break;
       case TOK_VARDECL:
-         //IMPLEMENT
+         struct symbol* variable;
+         variable = new struct symbol;
+         //IMPLEMENT set variable details
+         //IMPLEMENT type checking
+         //switch on variable type
+         switch(root->children[0]->symbol){
+            case TOK_ARRAY:
+               //IMPLEMENT
+               break;
+            case TOK_BOOL:
+               //IMPLEMENT
+               break;
+            case TOK_CHAR:
+               //IMPLEMENT
+               break;
+            case TOK_INT:
+               //IMPLEMENT
+               break;
+            case TOK_STRING:
+               //IMPLEMENT
+               break;
+            case TOK_TYPEID:
+               //IMPLEMENT
+               break;
+         }
+         if(symbol_stack.back() == nullptr)
+            symbol_stack.back() = new symbol_table;
+         symbol_stack.back()->insert({root->children[0]->lexinfo,variable});
          break;
       case TOK_WHILE:
          //IMPLEMENT
@@ -121,6 +148,7 @@ void gen_symtable_rec(astree* root){
 void gen_symtable(astree* root){
    for(int i = 0; i < 5; i++)
       type_name_table.insert({&reserved_words[i],nullptr});
+   symbol_stack.push_back(nullptr);
    for(size_t child = 0; child < root->children.size(); ++child){
       switch(root->children[child]->symbol){
          case TOK_FUNCTION:
