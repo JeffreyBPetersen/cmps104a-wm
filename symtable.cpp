@@ -60,8 +60,12 @@ void output_symnode(symbol* node){
 void gen_symtable_rec(astree* root){
    switch(root->symbol){
       case TOK_BLOCK:
-         //IMPLEMENT push_back to symbol_stack
-         //IMPLEMENT recurse on children
+			symbol_stack.push_back(nullptr);
+			next_block++;
+         for(size_t child = 0; child < root->children.size(); ++child){
+				gen_symtable_rec(root->children[child]);
+			}
+			symbol_stack.pop_back();
          break;
       case TOK_IF:
          //IMPLEMENT type check condition

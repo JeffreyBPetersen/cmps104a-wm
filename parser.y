@@ -83,10 +83,11 @@ paramlist   : paramlist ',' identdecl
             | '('                 { $$ = update_sym($1,
                                        TOK_PARAMLIST); }
             ;
-identdecl   : basetype TOK_IDENT  { update_sym($2, TOK_DECLID); 
+identdecl   : basetype TOK_IDENT  { update_sym($2, TOK_DECLID);
                                     $$ = adopt1($1, $2); }
             | basetype TOK_ARRAY TOK_IDENT
-                                  { $$ = adopt2($2, $1, $3); }
+                                  { update_sym($3, TOK_DECLID);
+                                    $$ = adopt2($2, $1, $3); }
             ;
 block       : block_rep '}'       { $$ = $1; }
             | ';'                 { $$ = $1; }
