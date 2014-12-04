@@ -111,9 +111,6 @@ set_exitstatus(EXIT_FAILURE); }
 (\"([^\\"\n]|\\[\\'"0nt])*) { scanner_useraction();
 scanner_badtoken(yytext);
 set_exitstatus(EXIT_FAILURE); }
-('\\') { scanner_useraction();
-scanner_badtoken(yytext);
-set_exitstatus(EXIT_FAILURE); }
 (\"([^\\"\n]|\\)*\") { scanner_useraction();
 scanner_badtoken(yytext);
 set_exitstatus(EXIT_FAILURE); }
