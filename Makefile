@@ -60,7 +60,7 @@ clean :
 spotless : clean
 	- rm ${EXECBIN} ${DEPFILE} yylex.output yyparse.output
 
-${DEPFILE} :
+${DEPFILE} : ${HYGEN}
 	${MKDEP} ${SOURCES} >${DEPFILE}
 
 deps :
