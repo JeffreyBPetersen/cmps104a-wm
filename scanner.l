@@ -100,7 +100,7 @@ return yylval_token(TOK_INTCON); }
 return yylval_token(TOK_CHARCON); }
 (\"([^\\"\n]|\\[\\'"0nt])*\") { scanner_useraction();
 return yylval_token(TOK_STRINGCON); }
-#[ ][0-9]+[ ](\"([^\\"\n]|\\[\\'"0nt])*\").* { scanner_useraction();
+#[ ][0-9]+[ ](\"([^\\"\n]|\\[\\'"0nt])*\")([ ][1234])* { scanner_useraction();
 scanner_include(); }
 [0-9][a-zA-Z0-9_]* { scanner_useraction();
 scanner_badtoken(yytext);
