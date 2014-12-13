@@ -211,6 +211,7 @@ void gen_symtable_rec(astree* root){
                duplicate declaration error
             add symbol to type name table by TYPEID
             recurse on child (TOK_STRUCT)
+				sym_output << endl;
             */
             break;
          
@@ -245,7 +246,9 @@ void gen_symtable_rec(astree* root){
             else
                populate symbol node parameters with parameters
                add symbol node to global symbol table
+				sym_output << endl;
             enter_block(block)
+				sym_output << endl;
             */
             break;
          
@@ -318,10 +321,6 @@ void gen_symtable_rec(astree* root){
             break;
             
          case TOK_IDENT:
-            /* IMPLEMENT
-            check symbol table
-            set type attributes
-            */
             symbol* symnode;
             int i;
             for(i = symbol_stack.size() - 1; i >= 0; i--){
@@ -359,11 +358,23 @@ void gen_symtable_rec(astree* root){
             break;
             
          case '=':
-            /* IMPLEMENT
-            recurse on operands
-            typecheck operands
-            set type attributes
-            */
+				gen_symtable_rec(child);
+				if(!child->children[0]->attributes[ATTR_lval] ||
+					!is_compatible(child->children[0], child->children[1]))
+					typecheck_error(child, "operands not matching types");
+				if(child->children[0]->attributes[ATTR_bool])
+					child->attributes[ATTR_bool] = true;
+				else if(child->children[0]->attributes[ATTR_char])
+					child->attributes[ATTR_char] = true;
+				else if(child->children[0]->attributes[ATTR_int])
+					child->attributes[ATTR_int] = true;
+				else if(child->children[0]->attributes[ATTR_string])
+					child->attributes[ATTR_string] = true;
+				else if(child->children[0]->attributes[ATTR_struct]){
+					child->attributes[ATTR_struct] = true;
+					child->struct_name = child->children[0]->struct_name;
+				}
+				child->attributes[ATTR_vreg] = true;
             break;
          
          case TOK_EQ:
