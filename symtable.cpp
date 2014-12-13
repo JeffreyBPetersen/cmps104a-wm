@@ -78,15 +78,47 @@ void gen_symtable_rec(astree* root){
       switch(root->children[child]->symbol){
          case TOK_STRUCT:
             /* IMPLEMENT
+            if(type name table has duplicate declaration)
+               duplicate declaration error
+            add symbol to type name table by TYPEID
+            loop through children
+               recurse on child
+               add symbol node for child to fields
             */
             break;
          
          case TOK_PROTOTYPE:
             /* IMPLEMENT
+            set attributes by return type
+            set name by DECLID in return type
+            recurse on parameters
+            if(global symbol table has duplicate declaration)
+               typecheck against duplicate
+                  return type
+                  parameters
+            else
+               populate symbol node parameters with parameters
+               add symbol node to global symbol table
             */
             break;
          case TOK_FUNCTION:
             /* IMPLEMENT
+            set attributes by return type
+            set name by DECLID in return type
+            if(global symbol table has duplicate function declaration)
+               duplicate declaration error
+            save current_block to temporary variable
+            set current_block to next_block
+            increment next_block
+            recurse on parameters
+            if(global symbol table has matching prototype declaration)
+               typecheck against duplicate
+                  return type
+                  parameters
+            else
+               populate symbol node parameters with parameters
+               add symbol node to global symbol table
+            enter_block(block)
             */
             break;
          
