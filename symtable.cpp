@@ -57,6 +57,29 @@ void output_symnode(symbol* node){
    sym_output << endl;
 }
 
+/*
+gen_symtable_rec(astree* root){
+	for(size_t child = 0; child < root->children.size(); ++child){
+      switch(root->children[child]->symbol){
+         case TOK_FUNCTION:
+            //IMPLEMENT check for conflicting definition
+            //IMPLEMENT add to global identifiers
+            //IMPLEMENT enter block, push_back parameters, and recurse
+            break;
+         case TOK_PROTOTYPE:
+            //IMPLEMENT check for conflicting definition
+            //IMPLEMENT add to global identifiers if absent
+            break;
+         case TOK_STRUCT:
+            //IMPLEMENT check for conflicting definitions
+            //IMPLEMENT add to type_name_table
+            //IMPLEMENT add fields if full definition
+            break;
+      }
+   }
+}
+*/
+
 void gen_symtable_rec(astree* root){
    switch(root->symbol){
       case TOK_BLOCK:
@@ -216,6 +239,7 @@ void gen_symtable(astree* root){
    for(int i = 0; i < 5; i++)
       type_name_table.insert({&reserved_words[i],nullptr});
    symbol_stack.push_back(nullptr);
+	//gen_symtable_rec(root);
    for(size_t child = 0; child < root->children.size(); ++child){
       switch(root->children[child]->symbol){
          case TOK_FUNCTION:
