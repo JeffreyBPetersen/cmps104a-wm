@@ -68,6 +68,6 @@ deps :
 	${MAKE} --no-print-directory ${DEPFILE}
 
 submit:
-	submit cmps104a-wm.f14 asg4 ${CHECKINS}
+	submit cmps104a-wm.f14 asg5 ${CHECKINS}
 
 include Makefile.dep

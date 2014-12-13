@@ -11,6 +11,9 @@ ofstream sym_output;
 vector<symbol_table*> symbol_stack;
 symbol_table type_name_table;
 int next_block;
+int current_block;
+//current_function is used to typecheck return statements
+symbol* current_function = nullptr;
 
 string reserved_words[] = {"void", "bool", "char", "int", "string"};
 
@@ -57,32 +60,90 @@ void output_symnode(symbol* node){
    sym_output << endl;
 }
 
+void enter_block(astree* root){
+   /*
+   if(block is present)
+      push nullptr to symbol_stack
+      save current_block to temporary variable
+      set current_block to next_block
+      increment next_block
+      recurse on block
+      pop symbol_stack
+      restore current_block to temporary variable
+   */
+}
+
 void gen_symtable_rec(astree* root){
    for(size_t child = 0; child < root->children.size(); ++child){
       switch(root->children[child]->symbol){
          case TOK_STRUCT:
+            /* IMPLEMENT
+            */
             break;
          
          case TOK_PROTOTYPE:
+            /* IMPLEMENT
+            */
             break;
          case TOK_FUNCTION:
+            /* IMPLEMENT
+            */
             break;
          
          case TOK_BLOCK:
+            /* IMPLEMENT
+            enter_block({block})
+            */
             break;
          case TOK_IF:
+            /* IMPLEMENT
+            recurse on expression
+            typecheck expression
+            enter_block({if block})
+            */
             break;
          case TOK_IFELSE:
+            /* IMPLEMENT
+            recurse on expression
+            typecheck expression
+            enter_block({if block})
+            enter_block({else block})
+            */
             break;
          case TOK_WHILE:
+            /* IMPLEMENT
+            recurse on expression
+            typecheck expression
+            enter_block({while block})
+            */
             break;
             
          case TOK_VARDECL:
+            /* IMPLEMENT
+            check top of symbol stack for duplicate declaration
+            ...?
+            typecheck right operand against left operand
+            ...?
+            */
             break;
             
          case TOK_CALL:
+            /* IMPLEMENT
+            recurse on arguments
+            lookup function by identifier
+            typecheck arguments against parameters
+            set type attributes by function
+            */
             break;
          case TOK_RETURN:
+            /* IMPLEMENT
+            if(no operand)
+               if(current_function != nullptr)
+                  typecheck current_function has type void
+            else
+               recurse on operand
+               typecheck operand against current_function
+            */
             break;
             
          case TOK_IDENT:
