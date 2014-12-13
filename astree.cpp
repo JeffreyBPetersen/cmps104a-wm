@@ -155,7 +155,7 @@ static void output_ast_node (ostream& out, astree* node){
       if(node->symnode != nullptr)
          out << " (" << node->symnode->filenr << "." <<
             node->symnode->linenr << "." << node->symnode->offset << 
-            ")" << ")";
+            ")";
       else
          out << " (symnode not bound)";
    }

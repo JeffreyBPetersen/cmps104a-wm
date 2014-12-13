@@ -60,48 +60,15 @@ void output_symnode(symbol* node){
    sym_output << endl;
 }
 
-void enter_block(astree* root){
-   /*
-   if(block is present)
-      push nullptr to symbol_stack
-      save current_block to temporary variable
-      set current_block to next_block
-      increment next_block
-      recurse on block
-      pop symbol_stack
-      restore current_block to temporary variable
-   */
-}
-
-void declare_variable(astree* type, astree* ident){
-   /* TWEAK & IMPLEMENT
-   if(ident is declid)
-      if(duplicate declaration on top of symbol stack)
-         duplicate declaration error
-      push to top of symbol stack
-   else(ident is field)
-      if(duplicate declaration in child's fields)
-         duplicate declaration error
-      push to child's fields
-   
-   switch(child->children[0]->symbol){
-      case TOK_BOOL:
-         child->children[0]->attributes[ATTR_bool] = true;
-         break;
-      case TOK_CHAR:
-         child->children[0]->attributes[ATTR_char] = true;
-         break;
-      case TOK_INT:
-         child->children[0]->attributes[ATTR_int] = true;
-         break;
-      case TOK_STRING:
-         child->children[0]->attributes[ATTR_string] = true;
-         break;
-      case TOK_TYPEID:
-         child->children[0]->attributes[ATTR_struct] = true;
-         break;
-   }
-   */
+void undeclared_error(astree* node, string message){
+   string name = get_yytname(node->symbol);
+   if(name.substr(0,4).compare("TOK_") == 0)
+      name = name.substr(4);
+   cerr << "ERROR: Undeclared identifier @ " << name << " \"" <<
+      *node->lexinfo << "\" (" << node->filenr << "." <<
+      node->linenr << "." << node->offset << ") {" <<
+      node->blocknr << "} Cause: " << message << endl;
+   /* IMPLEMENT set exit status to failure */
 }
 
 void typecheck_error(astree* node, string message){
@@ -112,6 +79,94 @@ void typecheck_error(astree* node, string message){
       *node->lexinfo << "\" (" << node->filenr << "." <<
       node->linenr << "." << node->offset << ") {" <<
       node->blocknr << "} Cause: " << message << endl;
+   /* IMPLEMENT set exit status to failure */
+}
+
+void redeclaration_error(astree* node, string message){
+   string name = get_yytname(node->symbol);
+   if(name.substr(0,4).compare("TOK_") == 0)
+      name = name.substr(4);
+   cerr << "ERROR: Duplicate declaration @ " << name << " \"" <<
+      *node->lexinfo << "\" (" << node->filenr << "." <<
+      node->linenr << "." << node->offset << ") {" <<
+      node->blocknr << "} Cause: " << message << endl;
+   /* IMPLEMENT set exit status to failure */
+}
+
+void add_symnode(astree* node, symbol* symnode, symbol_table* table){
+   symnode->ident = *node->lexinfo;
+   symnode->attributes = node->attributes;
+   symnode->filenr = node->filenr;
+   symnode->linenr = node->linenr;
+   symnode->offset = node->offset;
+   symnode->blocknr = node->blocknr;
+   table->insert({node->lexinfo, symnode});
+   output_symnode(symnode);
+}
+
+void enter_block(astree* root){
+   /*
+   if(block is present)
+      push nullptr to symbol_stack
+      save current_block to temporary variable
+      set current_block to next_block
+      increment next_block
+      recurse on block
+      pop symbol_stack
+      set current_block to temporary variable
+   */
+}
+
+void declare_identifier(astree* type, astree* ident, astree* parent){
+   /* TWEAK & IMPLEMENT
+   if(ident is declid)
+      if(duplicate declaration on top of symbol stack)
+         duplicate declaration error
+      push to top of symbol stack
+   else(ident is field)
+      if(duplicate declaration in parent's fields)
+         duplicate declaration error
+      push to parent's fields
+   */
+   symbol* identifier = new symbol;
+   switch(type->symbol){
+      case TOK_BOOL:
+         ident->attributes[ATTR_bool] = true;
+         break;
+      case TOK_CHAR:
+         ident->attributes[ATTR_char] = true;
+         break;
+      case TOK_INT:
+         ident->attributes[ATTR_int] = true;
+         break;
+      case TOK_STRING:
+         ident->attributes[ATTR_string] = true;
+         break;
+      case TOK_TYPEID:
+         ident->attributes[ATTR_struct] = true;
+         /* IMPLEMENT
+         check for structure definition
+         */
+         break;
+   }
+   if(ident->symbol == TOK_DECLID){
+      if(symbol_stack.back() != nullptr &&
+         symbol_stack.back()->find(ident->lexinfo) != 
+         symbol_stack.back()->end())
+         redeclaration_error(ident,
+            "Identifier already used in local scope");
+      ident->attributes[ATTR_variable] = true;
+      ident->attributes[ATTR_lval] = true;
+      if(symbol_stack.back() == nullptr)
+         symbol_stack.back() = new symbol_table;
+      add_symnode(ident, identifier, symbol_stack.back());
+   }
+   else if(ident->symbol == TOK_FIELD){
+      /* IMPLEMENT
+      */
+   }
+   else
+      cerr << "ERROR: Invalid variable declaration token\n";
 }
 
 bool is_compatible_primitive(astree* left, astree* right){
@@ -138,8 +193,9 @@ bool is_compatible_reference(astree* left, astree* right){
 
 bool is_compatible(astree* left, astree* right){
    return
-      is_compatible_primitive(left, right) ||
-      is_compatible_reference(left, right);
+      left->attributes[ATTR_array] == right->attributes[ATTR_array] &&
+      (is_compatible_primitive(left, right) ||
+      is_compatible_reference(left, right));
 }
 
 void gen_symtable_rec(astree* root){
@@ -222,24 +278,24 @@ void gen_symtable_rec(astree* root){
             break;
             
          case TOK_VARDECL:
-            /* IMPLEMENT
-            recurse
-            typecheck right against left->children->back
-            */
             gen_symtable_rec(child);
-            //
+            if(!is_compatible(child->children[1],
+               child->children[0]->children.back()))
+                  typecheck_error(child, "operands not matching types");
             break;
          
          case TOK_ARRAY:
             child->children[1]->attributes[ATTR_array] = true;
-            declare_variable(child->children[0], child->children[1]);
+            declare_identifier(child->children[0],
+               child->children[1],
+               root);
             break;
          case TOK_BOOL:
          case TOK_CHAR:
          case TOK_INT:
          case TOK_STRING:
          case TOK_TYPEID:
-            declare_variable(child, child->children[0]);
+            declare_identifier(child, child->children[0], root);
             break;
             
          case TOK_CALL:
@@ -266,6 +322,23 @@ void gen_symtable_rec(astree* root){
             check symbol table
             set type attributes
             */
+            symbol* symnode;
+            int i;
+            for(i = symbol_stack.size() - 1; i >= 0; i--){
+               if(symbol_stack[i]->find(child->lexinfo) !=
+                  symbol_stack[i]->end()){
+                  symnode = 
+                     symbol_stack[i]->find(child->lexinfo)->second;
+                  break;
+               }
+            }
+            if(i < 0)
+               undeclared_error(child,
+                  "variable not found in symbol_stack");
+            else{
+               child->attributes = symnode->attributes;
+               child->symnode = symnode;
+            }
             break;
          case '.':
             /* IMPLEMENT
