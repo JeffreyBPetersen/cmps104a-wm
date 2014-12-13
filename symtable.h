@@ -28,6 +28,8 @@ using symbol_entry = pair<const string*, symbol*>;
 struct symbol{
    attr_bitset attributes;
    symbol_table* fields;
+   //ident is the identifier for the symbol
+   string ident;
    //field_of is used when ATTR_field
    //struct_name is used when ATTR_struct
    string field_of, struct_name;

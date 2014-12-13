@@ -17,7 +17,7 @@ string reserved_words[] = {"void", "bool", "char", "int", "string"};
 void output_symnode(symbol* node){
    for(int i = 0; i < (int)symbol_stack.size() - 1; i++)
       sym_output << "   ";
-   sym_output << "PLACEHOLDER_identifier" << " (" << node->filenr <<
+   sym_output << node->ident << " (" << node->filenr <<
       "." << node->linenr << "." << node->offset << ") {" <<
       node->blocknr << "}";
    if(node->attributes[ATTR_void])
@@ -33,7 +33,7 @@ void output_symnode(symbol* node){
    if(node->attributes[ATTR_string])
       sym_output << " string";
    if(node->attributes[ATTR_struct])
-      sym_output << " struct \"" << "PLACEHOLDER_struct_name" << "\"";
+      sym_output << " struct \"" << node->struct_name << "\"";
    if(node->attributes[ATTR_array])
       sym_output << " array";
    if(node->attributes[ATTR_function])
@@ -41,7 +41,7 @@ void output_symnode(symbol* node){
    if(node->attributes[ATTR_variable])
       sym_output << " variable";
    if(node->attributes[ATTR_field])
-      sym_output << " field {" << "PLACEHOLDER_struct_name" << "}";
+      sym_output << " field {" << node->field_of << "}";
    if(node->attributes[ATTR_typeid])
       sym_output << " typeid";
    if(node->attributes[ATTR_param])
@@ -86,20 +86,54 @@ void gen_symtable_rec(astree* root){
             break;
             
          case TOK_IDENT:
+            /* IMPLEMENT
+            check symbol table
+            set type attributes
+            */
+            break;
+         case '.':
+            /* IMPLEMENT
+            recurse on left operand (struct)
+            typecheck left operand
+            check {left operand}->fields for field
+            set type attributes by field
+            */
             break;
          case TOK_INDEX:
+            /* IMPLEMENT
+            recurse on indexed
+            recurse on index
+            typecheck indexed
+            typecheck index
+            set type attributes
+            */
             break;
             
          case '=':
+            /* IMPLEMENT
+            recurse on operands
+            typecheck operands
+            set type attributes
+            */
             break;
          
          case TOK_EQ:
          case TOK_NE:
+            /* IMPLEMENT
+            recurse on operands
+            typecheck operands
+            set type attributes
+            */
             break;
          case TOK_GE:
          case TOK_GT:
          case TOK_LE:
          case TOK_LT:
+            /* IMPLEMENT
+            recurse on operands
+            typecheck operands
+            set type attributes
+            */
             break;
          
          case '+':
@@ -107,29 +141,72 @@ void gen_symtable_rec(astree* root){
          case '*':
          case '/':
          case '%':
+            /* IMPLEMENT
+            recurse on operands
+            typecheck operands
+            set type attributes
+            */
             break;
          case TOK_POS:
          case TOK_NEG:
+            /* IMPLEMENT
+            recurse on operand
+            typecheck operand
+            set type attributes
+            */
             break;
          
          case '!':
+            /* IMPLEMENT
+            recurse on operand
+            typecheck operand
+            set type attributes
+            */
             break;
          case TOK_ORD:
+            /* IMPLEMENT
+            recurse on operand
+            typecheck operand
+            set type attributes
+            */
             break;
          case TOK_CHR:
+            /* IMPLEMENT
+            recurse on operand
+            typecheck operand
+            set type attributes
+            */
             break;
          
          case TOK_INTCON:
+            /* IMPLEMENT
+            set type attributes
+            */
             break;
          case TOK_CHARCON:
+            /* IMPLEMENT
+            set type attributes
+            */
             break;
          case TOK_STRINGCON:
+            /* IMPLEMENT
+            set type attributes
+            */
             break;
          case TOK_FALSE:
+            /* IMPLEMENT
+            set type attributes
+            */
             break;
          case TOK_TRUE:
+            /* IMPLEMENT
+            set type attributes
+            */
             break;
          case TOK_NULL:
+            /* IMPLEMENT
+            set type attributes
+            */
             break;
             
          case ';':

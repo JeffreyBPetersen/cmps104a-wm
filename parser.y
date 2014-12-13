@@ -184,9 +184,8 @@ variable    : TOK_IDENT           { $$ = $1; }
             | expr '[' expr ']'   { free_ast($4);
                                     $$ = adopt2sym($2, $1, $3,
                                        TOK_INDEX); }
-            | expr '.' TOK_IDENT  { free_ast($2);
-                                    update_sym($3, TOK_FIELD);
-                                    $$ = adopt1($1, $3); }
+            | expr '.' TOK_IDENT  { update_sym($3, TOK_FIELD);
+                                    $$ = adopt2($2, $1, $3); }
             ;
 constant    : TOK_INTCON          { $$ = $1; }
             | TOK_CHARCON         { $$ = $1; }
@@ -205,10 +204,4 @@ const char *get_yytname (int symbol) {
 
 bool is_defined_token (int symbol) {
    return YYTRANSLATE (symbol) > YYUNDEFTOK;
-}
-
-static void* yycalloc (size_t size) {
-   void* result = calloc (1, size);
-   assert (result != NULL);
-   return result;
 }
