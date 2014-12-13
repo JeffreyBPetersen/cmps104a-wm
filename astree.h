@@ -17,9 +17,9 @@ struct astree {
    size_t linenr;            // line number from source code
    size_t offset;            // offset of token with current line
    const string* lexinfo;    // pointer to lexical information
-	//field_of is used when ATTR_field
-	//struct_name is used when ATTR_struct
-	string field_of, struct_name;
+   //field_of is used when ATTR_field
+   //struct_name is used when ATTR_struct
+   string field_of, struct_name;
    vector<astree*> children; // children of this n-way node
    //asg4 additions
    attr_bitset attributes;

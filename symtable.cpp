@@ -57,38 +57,103 @@ void output_symnode(symbol* node){
    sym_output << endl;
 }
 
-/*
-gen_symtable_rec(astree* root){
-	for(size_t child = 0; child < root->children.size(); ++child){
+void gen_symtable_rec(astree* root){
+   for(size_t child = 0; child < root->children.size(); ++child){
       switch(root->children[child]->symbol){
-         case TOK_FUNCTION:
-            //IMPLEMENT check for conflicting definition
-            //IMPLEMENT add to global identifiers
-            //IMPLEMENT enter block, push_back parameters, and recurse
-            break;
-         case TOK_PROTOTYPE:
-            //IMPLEMENT check for conflicting definition
-            //IMPLEMENT add to global identifiers if absent
-            break;
          case TOK_STRUCT:
-            //IMPLEMENT check for conflicting definitions
-            //IMPLEMENT add to type_name_table
-            //IMPLEMENT add fields if full definition
+            break;
+         
+         case TOK_PROTOTYPE:
+            break;
+         case TOK_FUNCTION:
+            break;
+         
+         case TOK_BLOCK:
+            break;
+         case TOK_IF:
+            break;
+         case TOK_IFELSE:
+            break;
+         case TOK_WHILE:
+            break;
+            
+         case TOK_VARDECL:
+            break;
+            
+         case TOK_CALL:
+            break;
+         case TOK_RETURN:
+            break;
+            
+         case TOK_IDENT:
+            break;
+         case TOK_INDEX:
+            break;
+            
+         case '=':
+            break;
+         
+         case TOK_EQ:
+         case TOK_NE:
+            break;
+         case TOK_GE:
+         case TOK_GT:
+         case TOK_LE:
+         case TOK_LT:
+            break;
+         
+         case '+':
+         case '-':
+         case '*':
+         case '/':
+         case '%':
+            break;
+         case TOK_POS:
+         case TOK_NEG:
+            break;
+         
+         case '!':
+            break;
+         case TOK_ORD:
+            break;
+         case TOK_CHR:
+            break;
+         
+         case TOK_INTCON:
+            break;
+         case TOK_CHARCON:
+            break;
+         case TOK_STRINGCON:
+            break;
+         case TOK_FALSE:
+            break;
+         case TOK_TRUE:
+            break;
+         case TOK_NULL:
+            break;
+            
+         case ';':
+            //ignore
+            break;
+         
+         default:
+            cerr << "ERROR: rec_gen_symtable() did not handle " << 
+               get_yytname(root->children[child]->symbol) << endl;
+            gen_symtable_rec(root->children[child]);
             break;
       }
    }
 }
-*/
 
-void gen_symtable_rec(astree* root){
+/*void gen_symtable_rec(astree* root){
    switch(root->symbol){
       case TOK_BLOCK:
-			symbol_stack.push_back(nullptr);
-			next_block++;
+         symbol_stack.push_back(nullptr);
+         next_block++;
          for(size_t child = 0; child < root->children.size(); ++child){
-				gen_symtable_rec(root->children[child]);
-			}
-			symbol_stack.pop_back();
+            gen_symtable_rec(root->children[child]);
+         }
+         symbol_stack.pop_back();
          break;
       case TOK_IF:
          //IMPLEMENT type check condition
@@ -233,14 +298,14 @@ void gen_symtable_rec(astree* root){
          root->attributes[ATTR_null] = true;
          break;
    }
-}
+}*/
 
 void gen_symtable(astree* root){
    for(int i = 0; i < 5; i++)
       type_name_table.insert({&reserved_words[i],nullptr});
    symbol_stack.push_back(nullptr);
-	//gen_symtable_rec(root);
-   for(size_t child = 0; child < root->children.size(); ++child){
+   gen_symtable_rec(root);
+   /*for(size_t child = 0; child < root->children.size(); ++child){
       switch(root->children[child]->symbol){
          case TOK_FUNCTION:
             //IMPLEMENT check for conflicting definition
@@ -260,5 +325,5 @@ void gen_symtable(astree* root){
             gen_symtable_rec(root->children[child]);
             break;
       }
-   }
+   }*/
 }

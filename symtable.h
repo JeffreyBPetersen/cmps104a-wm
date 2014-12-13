@@ -28,9 +28,9 @@ using symbol_entry = pair<const string*, symbol*>;
 struct symbol{
    attr_bitset attributes;
    symbol_table* fields;
-	//field_of is used when ATTR_field
-	//struct_name is used when ATTR_struct
-	string field_of, struct_name;
+   //field_of is used when ATTR_field
+   //struct_name is used when ATTR_struct
+   string field_of, struct_name;
    size_t filenr, linenr, offset;
    size_t blocknr;
    vector<symbol*>* parameters;
