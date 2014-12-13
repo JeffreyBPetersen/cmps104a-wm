@@ -73,17 +73,68 @@ void enter_block(astree* root){
    */
 }
 
+void declare_variable(astree* parent, astree* child){
+	/* IMPLEMENT
+	if(has declid)
+		if(duplicate declaration on top of symbol stack)
+			duplicate declaration error
+		push to top of symbol stack
+	else(has field)
+		if(duplicate declaration in child's fields)
+			duplicate declaration error
+		push to child's fields
+	*/
+}
+
+void typecheck_error(astree* node, string message){
+	string name = get_yytname(node->symbol);
+   if(name.substr(0,4).compare("TOK_") == 0)
+      name = name.substr(4);
+	cerr << "ERROR: Invalid Type @ " << name << " \"" <<
+		*node->lexinfo << "\" (" << node->filenr << "." <<
+		node->linenr << "." << node->offset << ") {" <<
+      node->blocknr << "} Cause: " << message << endl;
+}
+
+bool is_compatible_primitive(astree* left, astree* right){
+	return
+		(left->attributes[ATTR_bool] && right->attributes[ATTR_bool]) ||
+		(left->attributes[ATTR_char] && right->attributes[ATTR_char]) ||
+		(left->attributes[ATTR_int] && right->attributes[ATTR_int]);
+}
+
+bool is_compatible_reference(astree* left, astree* right){
+	return
+		(left->attributes[ATTR_null] &&
+		(right->attributes[ATTR_null] || right->attributes[ATTR_string] ||
+		right->attributes[ATTR_struct])) ||
+		(right->attributes[ATTR_null] &&
+		(left->attributes[ATTR_null] || left->attributes[ATTR_string] ||
+		left->attributes[ATTR_struct])) ||
+		(left->attributes[ATTR_string] &&
+		right->attributes[ATTR_string]) ||
+		(left->attributes[ATTR_struct] &&
+		right->attributes[ATTR_struct] &&
+		left->struct_name.compare(right->struct_name) == 0);
+}
+
+bool is_compatible(astree* left, astree* right){
+	return
+		is_compatible_primitive(left, right) ||
+		is_compatible_reference(left, right);
+}
+
 void gen_symtable_rec(astree* root){
-   for(size_t child = 0; child < root->children.size(); ++child){
-      switch(root->children[child]->symbol){
+	astree* child;
+   for(size_t child_num = 0; child_num < root->children.size(); ++child_num){
+		child = root->children[child_num];
+      switch(child->symbol){
          case TOK_STRUCT:
             /* IMPLEMENT
             if(type name table has duplicate declaration)
                duplicate declaration error
             add symbol to type name table by TYPEID
-            loop through children
-               recurse on child
-               add symbol node for child to fields
+            recurse on child (TOK_STRUCT)
             */
             break;
          
@@ -152,12 +203,48 @@ void gen_symtable_rec(astree* root){
             
          case TOK_VARDECL:
             /* IMPLEMENT
-            check top of symbol stack for duplicate declaration
-            ...?
+				recurse on left operand
+				recurse on right operand
             typecheck right operand against left operand
-            ...?
             */
             break;
+			case TOK_ARRAY:
+				/* IMPLEMENT
+				recurse on type
+				set type attributes by type
+				declare_variable(root, root->children[child])
+				*/
+				break;
+			case TOK_BOOL:
+				/* IMPLEMENT
+				set type attributes by type
+				declare_variable(root, root->children[child])
+				*/
+				break;
+			case TOK_CHAR:
+				/* IMPLEMENT
+				set type attributes by type
+				declare_variable(root, root->children[child])
+				*/
+				break;
+			case TOK_INT:
+				/* IMPLEMENT
+				set type attributes by type
+				declare_variable(root, root->children[child])
+				*/
+				break;
+			case TOK_STRING:
+				/* IMPLEMENT
+				set type attributes by type
+				declare_variable(root, root->children[child])
+				*/
+				break;
+			case TOK_TYPEID:
+				/* IMPLEMENT
+				set type attributes by type
+				declare_variable(root, root->children[child])
+				*/
+				break;
             
          case TOK_CALL:
             /* IMPLEMENT
@@ -212,21 +299,23 @@ void gen_symtable_rec(astree* root){
          
          case TOK_EQ:
          case TOK_NE:
-            /* IMPLEMENT
-            recurse on operands
-            typecheck operands
-            set type attributes
-            */
+            gen_symtable_rec(child);
+				if(!is_compatible(child->children[0], child->children[1]))
+					typecheck_error(child, "operands not matching types");
+				child->attributes[ATTR_bool] = true;
+				child->attributes[ATTR_vreg] = true;
+            break;
             break;
          case TOK_GE:
          case TOK_GT:
          case TOK_LE:
          case TOK_LT:
-            /* IMPLEMENT
-            recurse on operands
-            typecheck operands
-            set type attributes
-            */
+            gen_symtable_rec(child);
+				if(!is_compatible_primitive(child->children[0],
+					child->children[1]))
+					typecheck_error(child, "operands not matching primitives");
+				child->attributes[ATTR_bool] = true;
+				child->attributes[ATTR_vreg] = true;
             break;
          
          case '+':
@@ -234,72 +323,65 @@ void gen_symtable_rec(astree* root){
          case '*':
          case '/':
          case '%':
-            /* IMPLEMENT
-            recurse on operands
-            typecheck operands
-            set type attributes
-            */
+            gen_symtable_rec(child);
+				if(!(child->children[0]->attributes[ATTR_int]
+					&& child->children[1]->attributes[ATTR_int]))
+					typecheck_error(child, "non-int operand");
+				child->attributes[ATTR_int] = true;
+				child->attributes[ATTR_vreg] = true;
             break;
+            break;
+
          case TOK_POS:
          case TOK_NEG:
-            /* IMPLEMENT
-            recurse on operand
-            typecheck operand
-            set type attributes
-            */
+            gen_symtable_rec(child);
+				if(!child->children[0]->attributes[ATTR_int])
+					typecheck_error(child, "non-int operand");
+				child->attributes[ATTR_int] = true;
+				child->attributes[ATTR_vreg] = true;
             break;
-         
          case '!':
-            /* IMPLEMENT
-            recurse on operand
-            typecheck operand
-            set type attributes
-            */
+            gen_symtable_rec(child);
+				if(!child->children[0]->attributes[ATTR_bool])
+					typecheck_error(child, "non-bool operand");
+				child->attributes[ATTR_bool] = true;
+				child->attributes[ATTR_vreg] = true;
             break;
          case TOK_ORD:
-            /* IMPLEMENT
-            recurse on operand
-            typecheck operand
-            set type attributes
-            */
+            gen_symtable_rec(child);
+				if(!child->children[0]->attributes[ATTR_char])
+					typecheck_error(child, "non-char operand");
+				child->attributes[ATTR_int] = true;
+				child->attributes[ATTR_vreg] = true;
             break;
          case TOK_CHR:
-            /* IMPLEMENT
-            recurse on operand
-            typecheck operand
-            set type attributes
-            */
+				gen_symtable_rec(child);
+				if(!child->children[0]->attributes[ATTR_int])
+					typecheck_error(child, "non-int operand");
+				child->attributes[ATTR_char] = true;
+				child->attributes[ATTR_vreg] = true;
             break;
          
          case TOK_INTCON:
-            /* IMPLEMENT
-            set type attributes
-            */
+            child->attributes[ATTR_int] = true;
+            child->attributes[ATTR_const] = true;
             break;
          case TOK_CHARCON:
-            /* IMPLEMENT
-            set type attributes
-            */
+            child->attributes[ATTR_char] = true;
+            child->attributes[ATTR_const] = true;
             break;
          case TOK_STRINGCON:
-            /* IMPLEMENT
-            set type attributes
-            */
+            child->attributes[ATTR_string] = true;
+            child->attributes[ATTR_const] = true;
             break;
          case TOK_FALSE:
-            /* IMPLEMENT
-            set type attributes
-            */
-            break;
          case TOK_TRUE:
-            /* IMPLEMENT
-            set type attributes
-            */
+            child->attributes[ATTR_bool] = true;
+				child->attributes[ATTR_const] = true;
             break;
          case TOK_NULL:
-            /* IMPLEMENT
-            set type attributes
-            */
+				child->attributes[ATTR_null] = true;
+            child->attributes[ATTR_const] = true;
             break;
             
          case ';':
@@ -308,8 +390,8 @@ void gen_symtable_rec(astree* root){
          
          default:
             cerr << "ERROR: rec_gen_symtable() did not handle " << 
-               get_yytname(root->children[child]->symbol) << endl;
-            gen_symtable_rec(root->children[child]);
+               get_yytname(child->symbol) << endl;
+            gen_symtable_rec(child);
             break;
       }
    }
