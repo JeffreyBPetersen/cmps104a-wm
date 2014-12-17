@@ -139,8 +139,8 @@ void declare_identifier(astree* type, astree* ident, symbol* structure){
          break;
       case TOK_TYPEID:
          ident->attributes[ATTR_struct] = true;
-			ident->struct_name = structure->struct_name;
-         is_struct = true;
+         ident->struct_name = *type->lexinfo;
+			is_struct = true;
          break;
    }
    if(ident->symbol == TOK_DECLID){
@@ -310,7 +310,8 @@ void gen_symtable_rec(astree* root){
          case TOK_INT:
          case TOK_STRING:
          case TOK_TYPEID:
-				if(root->symbol != TOK_STRUCT || child_num != 0)
+				if(root->symbol == TOK_VARDECL ||
+				(root->symbol == TOK_STRUCT && child_num != 0))
 					declare_identifier(child, child->children[0], root->symnode);
             break;
             
@@ -369,6 +370,31 @@ void gen_symtable_rec(astree* root){
             set type attributes
             */
             break;
+			
+			case TOK_NEW:
+				gen_symtable_rec(child);
+				if(type_name_table.find(child->children[0]->lexinfo) ==
+					type_name_table.end() ||
+					type_name_table.find(child->children[0]->lexinfo)->second->fields == nullptr)
+					undeclared_error(child->children[0], "Uninitialized type");
+					child->attributes[ATTR_struct] = true;
+					child->struct_name = *child->children[0]->lexinfo;
+				break;
+			case TOK_NEWSTRING:
+				gen_symtable_rec(child);
+				if(child->children[0]->attributes[ATTR_array] ||
+					!child->children[0]->attributes[ATTR_int])
+					typecheck_error(child->children[0], "operand not integer");
+				child->attributes[ATTR_string] = true;
+				child->attributes[ATTR_vreg] = true;
+				break;
+			case TOK_NEWARRAY:
+				/* ADD
+				recurse on child
+				typecheck expression is int and not array
+				set attributes by TOK_TYPEID (child->children[0])
+				*/
+				break;
             
          case '=':
 				gen_symtable_rec(child);

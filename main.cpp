@@ -20,12 +20,13 @@ int main (int argc, char** argv) {
    int option;
    string path;
    string program_name;
+	bool assignment_option = false;
    
    set_execname(argv[0]);
    
    // get flag options
    yy_flex_debug = 0;
-   while((option = getopt(argc, argv, "ly@:D:")) != -1){
+   while((option = getopt(argc, argv, "aly@:D:")) != -1){
       switch(option){
          case '@':
             fprintf(stderr, 
@@ -35,6 +36,9 @@ int main (int argc, char** argv) {
             fprintf(stderr, 
             "Option '-D' not yet implemented, string: %s\n", optarg);
             break;
+			case 'a':
+				assignment_option = true;
+				break;
          case 'l':
             yy_flex_debug = 1;
             break;
@@ -67,12 +71,14 @@ int main (int argc, char** argv) {
          ofstream str_output;
          ofstream ast_output;
          str_output.open(program_name + ".str");
-         tok_output.open(program_name + ".tok");
-         ast_output.open(program_name + ".ast");
-         sym_output.open(program_name + ".sym");
+			tok_output.open(program_name + ".tok");
+			ast_output.open(program_name + ".ast");
+         if(!assignment_option)
+				sym_output.open(program_name + ".sym");
          //while(yylex() != YYEOF);
          yyparse();
-         gen_symtable(yyparse_astree);
+			if(!assignment_option)
+				gen_symtable(yyparse_astree);
          dump_stringset(str_output);
          output_ast(ast_output, yyparse_astree);
       }
