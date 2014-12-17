@@ -376,9 +376,9 @@ void gen_symtable_rec(astree* root){
 				if(type_name_table.find(child->children[0]->lexinfo) ==
 					type_name_table.end() ||
 					type_name_table.find(child->children[0]->lexinfo)->second->fields == nullptr)
-					undeclared_error(child->children[0], "Uninitialized type");
-					child->attributes[ATTR_struct] = true;
-					child->struct_name = *child->children[0]->lexinfo;
+					undeclared_error(child->children[0], "uninitialized type");
+				child->attributes[ATTR_struct] = true;
+				child->struct_name = *child->children[0]->lexinfo;
 				break;
 			case TOK_NEWSTRING:
 				gen_symtable_rec(child);
@@ -394,6 +394,29 @@ void gen_symtable_rec(astree* root){
 				typecheck expression is int and not array
 				set attributes by TOK_TYPEID (child->children[0])
 				*/
+				gen_symtable_rec(child);
+				if(child->children[1]->attributes[ATTR_array] ||
+					!child->children[1]->attributes[ATTR_int])
+					typecheck_error(child->children[1], "operand not integer");
+				// ADD set other attributes to match child->children[0]
+				if((*child->children[0]->lexinfo).compare("bool") == 0)
+					child->attributes[ATTR_bool] = true;
+				else if((*child->children[0]->lexinfo).compare("char") == 0)
+					child->attributes[ATTR_char] = true;
+				else if((*child->children[0]->lexinfo).compare("int") == 0)
+					child->attributes[ATTR_int] = true;
+				else if((*child->children[0]->lexinfo).compare("string") == 0)
+					child->attributes[ATTR_string] = true;
+				else{
+					if(type_name_table.find(child->children[0]->lexinfo) ==
+					type_name_table.end() ||
+					type_name_table.find(child->children[0]->lexinfo)->second->fields == nullptr)
+						undeclared_error(child->children[0], "uninitialized type");
+					child->attributes[ATTR_struct] = true;
+					child->struct_name = *child->children[0]->lexinfo;
+				}
+				child->attributes[ATTR_array] = true;
+				child->attributes[ATTR_vreg] = true;
 				break;
             
          case '=':
